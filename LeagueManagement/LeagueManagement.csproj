@@ -107,7 +107,9 @@
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="config\configuration.json" />
+      <Content Include="config\configuration.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="config\connection_configuration.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
