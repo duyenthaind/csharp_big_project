@@ -2,11 +2,13 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
+using log4net;
 
-namespace LeagueManagement.thaind
+namespace LeagueManagement.thaind.backend
 {
     public class UpdateRankingWorker : BaseWorker
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(UpdateRankingWorker));
         private ConcurrentDictionary<string, long> CONCURRENT_CACHE = new ConcurrentDictionary<string, long>();
         
         private bool _running = true;
@@ -37,25 +39,25 @@ namespace LeagueManagement.thaind
                     {
                         if (currentTime < entry.Value)
                         {
-                            Debug.WriteLine($"Processed id: {entry.Key}, removing {entry.Key} from cached");
+                            log.Info($"Processed id: {entry.Key}, removing {entry.Key} from cached");
                             ProcessUpdate(entry.Key);
                             CONCURRENT_CACHE.TryRemove(entry.Key, out var isOk);
                         }
                         else
                         {
-                            Debug.WriteLine($"Skipping entry with key {entry.Key}");
+                            log.Info($"Skipping entry with key {entry.Key}");
                         }
                     }
                 }
 
                 try
                 {
-                    Debug.WriteLine("Do sleep");
+                    log.Info("Do sleep");
                     Thread.Sleep(TimeSpan.FromSeconds(5));
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Concurrent exception, ", ex);
+                    log.Error("Concurrent exception, ", ex);
                 }
             }
         }
@@ -63,7 +65,7 @@ namespace LeagueManagement.thaind
         protected override void Stop()
         {
             _running = false;
-            Debug.WriteLine($"Worker {GetWorkerName()} has stopped!!!");
+            log.Info($"Worker {GetWorkerName()} has stopped!!!");
         }
 
         private void ResolveJob(BaseJob job)

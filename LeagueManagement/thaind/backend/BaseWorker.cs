@@ -3,11 +3,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using log4net;
 
-namespace LeagueManagement.thaind
+namespace LeagueManagement.thaind.backend
 {
     public abstract class BaseWorker
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(BaseWorker));
+        
         private Thread _thread;
         private string workerName;
 
@@ -56,7 +59,7 @@ namespace LeagueManagement.thaind
                 }
 
                 var isOk2 = ALL_WORKERS.TryGetValue(id, out var listWorker2);
-                Debug.WriteLine($"Register worker name: {workerName}, group: {id}, size: {listWorker2?.Count ?? -1}");
+                log.Info($"Register worker name: {workerName}, group: {id}, size: {listWorker2?.Count ?? -1}");
             }
         }
 
@@ -82,7 +85,7 @@ namespace LeagueManagement.thaind
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error when process pack, " , ex);
+                log.Error("Error when process pack, " , ex);
             }
         }
 
@@ -93,12 +96,12 @@ namespace LeagueManagement.thaind
                 foreach(var entry in ALL_WORKERS)
                 {
                     entry.Value.ForEach(index => index.Stop());
-                    Debug.WriteLine($"Stop all workers in group {entry.Key}");
+                    log.Info($"Stop all workers in group {entry.Key}");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error when stop all workers: ", ex);
+                log.Error("Error when stop all workers: ", ex);
             }
         }
     }
