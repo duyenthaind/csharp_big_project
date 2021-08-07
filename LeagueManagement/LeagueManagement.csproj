@@ -68,6 +68,7 @@
         <Compile Include="thaind\backend\BaseWorker.cs" />
         <Compile Include="thaind\backend\UpdateRankingJob.cs" />
         <Compile Include="thaind\backend\UpdateRankingWorker.cs" />
+        <Compile Include="thaind\common\Config.cs" />
         <Compile Include="thaind\dao\AbstractDAO.cs" />
         <Compile Include="thaind\dao\ConnectionProvider.cs" />
         <Compile Include="thaind\TestForm.cs">
@@ -106,6 +107,9 @@
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="config\configuration.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="config\connection_configuration.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>

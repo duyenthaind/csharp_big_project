@@ -11,7 +11,7 @@ namespace LeagueManagement.thaind.dao
 {
     public class AbstractDAO
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(AbstractDAO));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractDAO));
         
         public void ExecuteNonQuery(string query, Dictionary<string, object> parameters)
         {
@@ -33,7 +33,7 @@ namespace LeagueManagement.thaind.dao
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Error: ", ex);
+                    Log.Error("Error: ", ex);
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -61,7 +61,7 @@ namespace LeagueManagement.thaind.dao
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Error: ", ex);
+                    Log.Error("Error: ", ex);
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -92,7 +92,7 @@ namespace LeagueManagement.thaind.dao
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Error: ", ex);
+                    Log.Error("Error: ", ex);
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

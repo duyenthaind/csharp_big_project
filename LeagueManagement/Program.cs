@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LeagueManagement.thaind.common;
 using LeagueManagement.thaind.dao;
 using log4net;
 using log4net.Config;
@@ -12,7 +13,7 @@ namespace LeagueManagement
 {
     static class Program
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -21,7 +22,8 @@ namespace LeagueManagement
         {
             XmlConfigurator.Configure(new FileInfo(Directory.GetCurrentDirectory() + @"\config\log4net.xml"));
             ConnectionProvider.LoadConfig(Directory.GetCurrentDirectory() + @"\config\connection_configuration.json");
-            log.Info("run ok");
+            Config.LoadConfig();
+            Log.Info("run ok");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

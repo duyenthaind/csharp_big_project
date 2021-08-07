@@ -2,14 +2,15 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
+using LeagueManagement.thaind.common;
 using log4net;
 
 namespace LeagueManagement.thaind.backend
 {
     public class UpdateRankingWorker : BaseWorker
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(UpdateRankingWorker));
-        private ConcurrentDictionary<string, long> CONCURRENT_CACHE = new ConcurrentDictionary<string, long>();
+        private static readonly ILog Log = LogManager.GetLogger(typeof(UpdateRankingWorker));
+        private readonly ConcurrentDictionary<string, long> CONCURRENT_CACHE = new ConcurrentDictionary<string, long>();
         
         private bool _running = true;
         
@@ -39,25 +40,25 @@ namespace LeagueManagement.thaind.backend
                     {
                         if (currentTime < entry.Value)
                         {
-                            log.Info($"Processed id: {entry.Key}, removing {entry.Key} from cached");
+                            Log.Info($"Processed id: {entry.Key}, removing {entry.Key} from cached");
                             ProcessUpdate(entry.Key);
                             CONCURRENT_CACHE.TryRemove(entry.Key, out var isOk);
                         }
                         else
                         {
-                            log.Info($"Skipping entry with key {entry.Key}");
+                            Log.Info($"Skipping entry with key {entry.Key}");
                         }
                     }
                 }
 
                 try
                 {
-                    log.Info("Do sleep");
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
+                    Log.Info("Do sleep");
+                    Thread.Sleep(TimeSpan.FromSeconds(Config.RANKING_WORKER_INTERVAL));
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Concurrent exception, ", ex);
+                    Log.Error("Concurrent exception, ", ex);
                 }
             }
         }
@@ -65,7 +66,7 @@ namespace LeagueManagement.thaind.backend
         protected override void Stop()
         {
             _running = false;
-            log.Info($"Worker {GetWorkerName()} has stopped!!!");
+            Log.Info($"Worker {GetWorkerName()} has stopped!!!");
         }
 
         private void ResolveJob(BaseJob job)
