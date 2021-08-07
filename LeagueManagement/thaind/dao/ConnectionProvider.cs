@@ -12,7 +12,7 @@ namespace LeagueManagement.thaind.dao
 {
     public class ConnectionProvider
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ConnectionProvider));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ConnectionProvider));
         private static string _connectionString = null;
         public static void LoadConfig(string fileConfigName)
         {
@@ -23,13 +23,13 @@ namespace LeagueManagement.thaind.dao
                 if (isExistDbString)
                 {
                     _connectionString = @value.ToString();
-                    log.Info("Load connection configuration ok!!!");
-                    log.Info("ConnectionString is: " + _connectionString);
+                    Log.Info("Load connection configuration ok!!!");
+                    Log.Info("ConnectionString is: " + _connectionString);
                 }
             }
             catch (Exception ex)
             {
-                log.Error("Error load connection configuration, trace: ", ex);
+                Log.Error("Error load connection configuration, trace: ", ex);
             }
         }
 

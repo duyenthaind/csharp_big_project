@@ -9,7 +9,7 @@ namespace LeagueManagement.thaind.backend
 {
     public abstract class BaseWorker
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(BaseWorker));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(BaseWorker));
         
         private Thread _thread;
         private string workerName;
@@ -59,7 +59,7 @@ namespace LeagueManagement.thaind.backend
                 }
 
                 var isOk2 = ALL_WORKERS.TryGetValue(id, out var listWorker2);
-                log.Info($"Register worker name: {workerName}, group: {id}, size: {listWorker2?.Count ?? -1}");
+                Log.Info($"Register worker name: {workerName}, group: {id}, size: {listWorker2?.Count ?? -1}");
             }
         }
 
@@ -85,7 +85,7 @@ namespace LeagueManagement.thaind.backend
             }
             catch (Exception ex)
             {
-                log.Error("Error when process pack, " , ex);
+                Log.Error("Error when process pack, " , ex);
             }
         }
 
@@ -96,12 +96,12 @@ namespace LeagueManagement.thaind.backend
                 foreach(var entry in ALL_WORKERS)
                 {
                     entry.Value.ForEach(index => index.Stop());
-                    log.Info($"Stop all workers in group {entry.Key}");
+                    Log.Info($"Stop all workers in group {entry.Key}");
                 }
             }
             catch (Exception ex)
             {
-                log.Error("Error when stop all workers: ", ex);
+                Log.Error("Error when stop all workers: ", ex);
             }
         }
     }
