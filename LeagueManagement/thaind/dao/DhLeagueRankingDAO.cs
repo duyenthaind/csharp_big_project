@@ -156,5 +156,37 @@ namespace LeagueManagement.thaind.dao
 
             return result;
         }
+        
+        public DhLeagueRanking GetByLeagueSeasonTeam(int leagueId, int seasonId, int teamId)
+        {
+            DhLeagueRanking result = null;
+            try
+            {
+                var parameters = new Dictionary<string, object>();
+                parameters.Add("leagueId", leagueId);
+                parameters.Add("seasonId", seasonId);
+                parameters.Add("teamId", teamId);
+                var dataTable = AbstractDAO.FetchData(QueryGetByLeagueSeasonTeam, parameters);
+                var targetedId = -1;
+                if (dataTable.Rows.Count > 0)
+                {
+                    var row = dataTable.Rows[0];
+                    result = DhLeagueRankingMapper.MapEntityFromRow(row);
+                    targetedId = result.Id;
+                }
+
+                if (dataTable.Rows.Count > 1 && targetedId != -1)
+                {
+                    // there is ambiguous record, delete others
+                    DeleteExcept(targetedId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error get by league,season and team, trace: ", ex);
+            }
+
+            return result;
+        }
     }
 }

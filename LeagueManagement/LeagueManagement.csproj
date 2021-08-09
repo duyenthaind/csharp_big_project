@@ -69,6 +69,7 @@
         <Compile Include="thaind\backend\UpdateRankingJob.cs" />
         <Compile Include="thaind\backend\UpdateRankingWorker.cs" />
         <Compile Include="thaind\common\Config.cs" />
+        <Compile Include="thaind\common\DbUtil.cs" />
         <Compile Include="thaind\dao\AbstractDAO.cs" />
         <Compile Include="thaind\dao\BaseDAO.cs" />
         <Compile Include="thaind\dao\ConnectionProvider.cs" />

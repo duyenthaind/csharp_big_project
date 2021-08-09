@@ -8,12 +8,12 @@ namespace LeagueManagement.thaind.entity
         private int leagueId;
         private int seasonId;
         private int teamId;
-        private int point;
-        private int numWin;
-        private int numDraw;
-        private int numLost;
-        private int playedMatches;
-        private int difference;
+        private int point = 0;
+        private int numWin = 0;
+        private int numDraw = 0;
+        private int numLost = 0;
+        private int playedMatches = 0;
+        private int difference = 0;
 
         public DhLeagueRanking()
         {
