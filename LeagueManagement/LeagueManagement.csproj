@@ -70,7 +70,15 @@
         <Compile Include="thaind\backend\UpdateRankingWorker.cs" />
         <Compile Include="thaind\common\Config.cs" />
         <Compile Include="thaind\dao\AbstractDAO.cs" />
+        <Compile Include="thaind\dao\BaseDAO.cs" />
         <Compile Include="thaind\dao\ConnectionProvider.cs" />
+        <Compile Include="thaind\dao\DhLeagueRankingDAO.cs" />
+        <Compile Include="thaind\dao\DhMatchDAO.cs" />
+        <Compile Include="thaind\entity\DhLeagueRanking.cs" />
+        <Compile Include="thaind\entity\DhMatch.cs" />
+        <Compile Include="thaind\mapper\AbstractRowMapper.cs" />
+        <Compile Include="thaind\mapper\DhLeagueRankingMapper.cs" />
+        <Compile Include="thaind\mapper\DhMatchMapper.cs" />
         <Compile Include="thaind\TestForm.cs">
           <SubType>Form</SubType>
         </Compile>
