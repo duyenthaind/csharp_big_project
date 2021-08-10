@@ -90,14 +90,14 @@ namespace LeagueManagement.thaind.backend
         {
             try
             {
-                var dbEntity = dhMatchDao.GetById(int.Parse(matchId.Substring("matchId_".Length)));
+                var dbEntity = dhMatchDao.GetById(int.Parse(matchId.Substring("matchId_".Length)), true);
                 if (dbEntity == null)
                 {
                     return;
                 }
 
                 var dhCurrentLeagueRankingHost =
-                    dhLeagueRankingDao.GetByLeagueSeasonTeam(dbEntity.LeagueId, dbEntity.SeasonId, dbEntity.TeamHostId);
+                    dhLeagueRankingDao.GetByLeagueSeasonTeam(dbEntity.LeagueId, dbEntity.SeasonId, dbEntity.TeamHostId, true);
                 if (dhCurrentLeagueRankingHost == null)
                 {
                     dhCurrentLeagueRankingHost = DbUtil.CreateNewRankingEntityFromMatch(dbEntity);
@@ -108,7 +108,7 @@ namespace LeagueManagement.thaind.backend
                         DbUtil.UpdateRankingEntityWithMatch(dhCurrentLeagueRankingHost, dbEntity);
                 }
                 var dhCurrentLeagueRankingAway =
-                    dhLeagueRankingDao.GetByLeagueSeasonTeam(dbEntity.LeagueId, dbEntity.SeasonId, dbEntity.TeamAwayId);
+                    dhLeagueRankingDao.GetByLeagueSeasonTeam(dbEntity.LeagueId, dbEntity.SeasonId, dbEntity.TeamAwayId, true);
                 if (dhCurrentLeagueRankingAway == null)
                 {
                     dhCurrentLeagueRankingAway = DbUtil.CreateNewRankingEntityFromMatch(dbEntity);

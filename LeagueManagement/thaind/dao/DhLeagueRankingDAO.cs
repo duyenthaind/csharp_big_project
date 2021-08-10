@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using LeagueManagement.thaind.dao;
+using System.Linq;
 using LeagueManagement.thaind.entity;
 using LeagueManagement.thaind.mapper;
 using log4net;
@@ -76,7 +76,7 @@ namespace LeagueManagement.thaind.dao
                 if (isExists)
                 {
                     entity.Id = dbEntity.Id;
-                    Update(entity);
+                    Update(entity, true);
                 }
                 else
                 {
@@ -156,7 +156,7 @@ namespace LeagueManagement.thaind.dao
 
             return result;
         }
-        
+
         public DhLeagueRanking GetByLeagueSeasonTeam(int leagueId, int seasonId, int teamId)
         {
             DhLeagueRanking result = null;
@@ -187,6 +187,59 @@ namespace LeagueManagement.thaind.dao
             }
 
             return result;
+        }
+
+        public DhLeagueRanking GetByLeagueSeasonTeam(int leagueId, int seasonId, int teamId, bool useLinq)
+        {
+            DhLeagueRanking result = null;
+            try
+            {
+                if (useLinq)
+                {
+                    var databaseObject = DatabaseObject.GetDatabaseContext();
+                    var dhLeagueRankings = databaseObject.DhLeagueRankings;
+                    dhLeagueRankings.Where(p => p.LeagueId == leagueId);
+                    dhLeagueRankings.Where(p => p.SeasonId == seasonId);
+                    dhLeagueRankings.Where(p => p.TeamId == teamId);
+                    var list = dhLeagueRankings.ToList();
+                    if (list.Any())
+                    {
+                        result = list[0];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error get by league,season and team, trace: ", ex);
+            }
+
+            return result;
+        }
+
+        public void Update(DhLeagueRanking entity, bool useLinq)
+        {
+            try
+            {
+                if (useLinq)
+                {
+                    var dbObject = DatabaseObject.GetDatabaseContext();
+                    var toUpdate = dbObject.DhLeagueRankings.First(p => p.Id == entity.Id);
+                    toUpdate.LeagueId = entity.LeagueId;
+                    toUpdate.SeasonId = entity.SeasonId;
+                    toUpdate.TeamId = entity.TeamId;
+                    toUpdate.Point = entity.Point;
+                    toUpdate.NumWin = entity.NumWin;
+                    toUpdate.NumDraw = entity.NumDraw;
+                    toUpdate.NumLost = entity.NumLost;
+                    toUpdate.PlayedMatches = entity.PlayedMatches;
+                    toUpdate.Difference = entity.Difference;
+                    dbObject.SubmitChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, trace: ", ex);
+            }
         }
     }
 }

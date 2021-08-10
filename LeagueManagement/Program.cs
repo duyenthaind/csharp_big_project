@@ -23,6 +23,7 @@ namespace LeagueManagement
             XmlConfigurator.Configure(new FileInfo(Directory.GetCurrentDirectory() + @"\config\log4net.xml"));
             ConnectionProvider.LoadConfig(Directory.GetCurrentDirectory() + @"\config\connection_configuration.json");
             Config.LoadConfig();
+            DataContextProvider.LoadConfig(Directory.GetCurrentDirectory() + @"\config\connection_configuration.json");
             Log.Info("run ok");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

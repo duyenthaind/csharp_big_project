@@ -44,6 +44,7 @@
         <Reference Include="System" />
         <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
+        <Reference Include="System.Data.Linq" />
         <Reference Include="System.Web" />
         <Reference Include="System.Xml.Linq" />
         <Reference Include="System.Data.DataSetExtensions" />
@@ -73,6 +74,8 @@
         <Compile Include="thaind\dao\AbstractDAO.cs" />
         <Compile Include="thaind\dao\BaseDAO.cs" />
         <Compile Include="thaind\dao\ConnectionProvider.cs" />
+        <Compile Include="thaind\dao\DatabaseObject.cs" />
+        <Compile Include="thaind\dao\DataContextProvider.cs" />
         <Compile Include="thaind\dao\DhLeagueRankingDAO.cs" />
         <Compile Include="thaind\dao\DhMatchDAO.cs" />
         <Compile Include="thaind\entity\DhLeagueRanking.cs" />
