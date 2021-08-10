@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using LeagueManagement.thaind.common;
+using LeagueManagement.thaind.dao;
 using log4net;
 
 namespace LeagueManagement.thaind.backend
@@ -36,12 +37,14 @@ namespace LeagueManagement.thaind.backend
                 }
                 lock (CONCURRENT_CACHE)
                 {
+                    var dhMatchDao = new DhMatchDAO();
+                    var dhLeagueRankingDao = new DhLeagueRankingDAO();
                     foreach (var entry in CONCURRENT_CACHE)
                     {
                         if (currentTime < entry.Value)
                         {
                             Log.Info($"Processed id: {entry.Key}, removing {entry.Key} from cached");
-                            ProcessUpdate(entry.Key);
+                            ProcessUpdate(entry.Key, dhMatchDao, dhLeagueRankingDao);
                             CONCURRENT_CACHE.TryRemove(entry.Key, out var isOk);
                         }
                         else
@@ -83,9 +86,46 @@ namespace LeagueManagement.thaind.backend
             }
         }
 
-        private void ProcessUpdate(string matchId)
+        private void ProcessUpdate(string matchId, DhMatchDAO dhMatchDao, DhLeagueRankingDAO dhLeagueRankingDao)
         {
-            
+            try
+            {
+                var dbEntity = dhMatchDao.GetById(int.Parse(matchId.Substring("matchId_".Length)));
+                if (dbEntity == null)
+                {
+                    return;
+                }
+
+                var dhCurrentLeagueRankingHost =
+                    dhLeagueRankingDao.GetByLeagueSeasonTeam(dbEntity.LeagueId, dbEntity.SeasonId, dbEntity.TeamHostId);
+                if (dhCurrentLeagueRankingHost == null)
+                {
+                    dhCurrentLeagueRankingHost = DbUtil.CreateNewRankingEntityFromMatch(dbEntity);
+                }
+                else
+                {
+                    dhCurrentLeagueRankingHost =
+                        DbUtil.UpdateRankingEntityWithMatch(dhCurrentLeagueRankingHost, dbEntity);
+                }
+                var dhCurrentLeagueRankingAway =
+                    dhLeagueRankingDao.GetByLeagueSeasonTeam(dbEntity.LeagueId, dbEntity.SeasonId, dbEntity.TeamAwayId);
+                if (dhCurrentLeagueRankingAway == null)
+                {
+                    dhCurrentLeagueRankingAway = DbUtil.CreateNewRankingEntityFromMatch(dbEntity);
+                }
+                else
+                {
+                    dhCurrentLeagueRankingAway =
+                        DbUtil.UpdateRankingEntityWithMatch(dhCurrentLeagueRankingAway, dbEntity);
+                }
+                Log.Info($"Updating league ranking, host_team_id: {dbEntity.TeamHostId}, away_team_id: {dbEntity.TeamAwayId} ");
+                dhLeagueRankingDao.SaveOrUpdate(dhCurrentLeagueRankingHost);
+                dhLeagueRankingDao.SaveOrUpdate(dhCurrentLeagueRankingAway);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error", ex);
+            }
         }
     }
 }

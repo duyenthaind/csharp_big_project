@@ -13,7 +13,7 @@ namespace LeagueManagement.thaind.dao
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractDAO));
         
-        public void ExecuteNonQuery(string query, Dictionary<string, object> parameters)
+        public static void ExecuteNonQuery(string query, Dictionary<string, object> parameters)
         {
             using (var connection = ConnectionProvider.GetConnection())
             {
@@ -39,7 +39,7 @@ namespace LeagueManagement.thaind.dao
             }
         }
 
-        public object ExecuteScalar(string query, Dictionary<string, object> parameters)
+        public static object ExecuteScalar(string query, Dictionary<string, object> parameters)
         {
             object result = null;
             using (var connection = ConnectionProvider.GetConnection())
@@ -69,7 +69,7 @@ namespace LeagueManagement.thaind.dao
             return result;
         }
 
-        public DataTable FetchData(string query, Dictionary<string, object> parameters)
+        public static DataTable FetchData(string query, Dictionary<string, object> parameters)
         {
             DataTable result = null;
             using (var connection = ConnectionProvider.GetConnection())
