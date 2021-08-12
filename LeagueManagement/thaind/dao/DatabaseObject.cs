@@ -10,7 +10,7 @@ namespace LeagueManagement.thaind.dao
 {
     public partial class DatabaseObject : DataContext
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(DatabaseObject));
+        // private static readonly ILog Log = LogManager.GetLogger(typeof(DatabaseObject));
 
         public DatabaseObject(string fileOrServerOrConnection) : base(fileOrServerOrConnection)
         {
@@ -30,12 +30,13 @@ namespace LeagueManagement.thaind.dao
             {
                 DatabaseObject dbObj = GetDatabaseContext();
                 var tbl = dbObj.DhLeagueRankings;
-                Log.Info(tbl);
-                Log.Info("IOKKKKKKKKKKK");
+                /*Log.Info(tbl);
+                Log.Info("IOKKKKKKKKKKK");*/
             }
             catch (Exception ex)
             {
-                Log.Error(ex, ex);
+                Console.WriteLine(ex.StackTrace);
+                // Log.Error(ex, ex);
             }
         }
     }

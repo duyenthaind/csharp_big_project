@@ -12,37 +12,35 @@ namespace LeagueManagement.thaind.backend
         private static readonly ILog Log = LogManager.GetLogger(typeof(BaseWorker));
         
         private Thread _thread;
-        private string workerName;
 
         private static ConcurrentDictionary<string, List<BaseWorker>> ALL_WORKERS =
             new ConcurrentDictionary<string, List<BaseWorker>>();
 
         protected ConcurrentBag<BaseJob> JOB_QUEUE = new ConcurrentBag<BaseJob>();
 
-        protected BaseWorker(string workerName, string name)
+        protected BaseWorker(string name)
         {
             _thread = new Thread(new ThreadStart(this.RunThread));
             _thread.Name = name;
-            this.workerName = workerName;
         }
 
         public void Start() => _thread.Start();
         public void Join() => _thread.Join();
         public bool IsAlive => _thread.IsAlive;
 
-        public string GetWorkerName()
-        {
-            return workerName;
-        }
-
         protected abstract void RunThread();
         protected abstract void Stop();
 
+        public string GetWorkerName()
+        {
+            return _thread.Name;
+        }
+        
         public void Register()
         {
             if (_thread.Name != null)
             {
-                var id = _thread.Name;
+                var id = this.GetType().Name;
                 if (!ALL_WORKERS.ContainsKey(id))
                 {
                     var listWorker = new List<BaseWorker>();
@@ -59,17 +57,17 @@ namespace LeagueManagement.thaind.backend
                 }
 
                 var isOk2 = ALL_WORKERS.TryGetValue(id, out var listWorker2);
-                Log.Info($"Register worker name: {workerName}, group: {id}, size: {listWorker2?.Count ?? -1}");
+                Log.Info($"Register worker name: {GetWorkerName()}, group: {id}, size: {listWorker2?.Count ?? -1}");
             }
         }
 
-        public static void PubJob(string groupName, int workerChooseIndex, BaseJob job)
+        public static void PubJob(Type groupName, int workerChooseIndex, BaseJob job)
         {
             try
             {
                 if (groupName != null)
                 {
-                    var isOk = ALL_WORKERS.TryGetValue(groupName, out var listWorker);
+                    var isOk = ALL_WORKERS.TryGetValue(groupName.Name, out var listWorker);
                     if (isOk)
                     {
                         if (workerChooseIndex > -1)
@@ -78,7 +76,8 @@ namespace LeagueManagement.thaind.backend
                         }
                         else
                         {
-                            listWorker[new Random(listWorker.Count).Next()].JOB_QUEUE.Add(job);
+                            var index = new Random().Next(listWorker.Count);
+                            listWorker[index].JOB_QUEUE.Add(job);
                         }
                     }
                 }
@@ -102,6 +101,24 @@ namespace LeagueManagement.thaind.backend
             catch (Exception ex)
             {
                 Log.Error("Error when stop all workers: ", ex);
+            }
+        }
+
+        public static void PrintAllWorker()
+        {
+            try
+            {
+                foreach(var entry in ALL_WORKERS)
+                {
+                    entry.Value.ForEach(t =>
+                    {
+                        Log.Info($"Worker {entry.Key}, name: {t.GetWorkerName()}");
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error " , ex);
             }
         }
     }

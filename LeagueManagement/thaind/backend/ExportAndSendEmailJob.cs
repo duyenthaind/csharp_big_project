@@ -2,7 +2,7 @@
 
 namespace LeagueManagement.thaind.backend
 {
-    public class ExportAndSendEmailJob
+    public class ExportAndSendEmailJob : BaseJob
     {
         private int leagueId;
 
