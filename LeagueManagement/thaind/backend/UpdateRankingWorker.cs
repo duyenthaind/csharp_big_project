@@ -15,7 +15,7 @@ namespace LeagueManagement.thaind.backend
         
         private bool _running = true;
         
-        public UpdateRankingWorker(string workerName, string name) : base(workerName, name)
+        public UpdateRankingWorker(string name) : base(name)
         {
         }
 

@@ -13,7 +13,7 @@ namespace LeagueManagement.thaind.backend
 
         private static bool _running = true;
 
-        public ExportAndSendEmailWorker(string workerName, string name) : base(workerName, name)
+        public ExportAndSendEmailWorker(string name) : base(name)
         {
         }
 
@@ -47,6 +47,7 @@ namespace LeagueManagement.thaind.backend
         {
             try
             {
+                Log.Info("Try do job: " + job);
                 if (job.GetType() == typeof(ExportAndSendEmailJob))
                 {
                 }

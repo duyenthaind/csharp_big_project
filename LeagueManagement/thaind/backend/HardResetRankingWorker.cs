@@ -19,7 +19,7 @@ namespace LeagueManagement.thaind.backend
 
         private bool _running = true;
 
-        public HardResetRankingWorker(string workerName, string name) : base(workerName, name)
+        public HardResetRankingWorker(string name) : base(name)
         {
         }
 
