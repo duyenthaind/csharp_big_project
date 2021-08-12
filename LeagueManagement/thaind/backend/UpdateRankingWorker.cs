@@ -80,7 +80,7 @@ namespace LeagueManagement.thaind.backend
                 {
                     var workJob = (UpdateRankingJob) job;
                     // if this job is still not processed then update it
-                    Console.WriteLine($"Job with id: {workJob.Id}, startTime: {workJob.TimeStart}");
+                    Log.Debug($"Job with id: {workJob.Id}, startTime: {workJob.TimeStart}");
                     CONCURRENT_CACHE.AddOrUpdate(workJob.Id, workJob.TimeStart, (key, value) => value);
                 }
             }
