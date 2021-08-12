@@ -76,9 +76,9 @@ namespace LeagueManagement.thaind.backend
                 lock (CONCURRENT_CACHE)
                 {
                     var workJob = (HardResetRankingJob) job;
-                    if (CONCURRENT_CACHE.IsEmpty || !CONCURRENT_CACHE.ContainsKey(workJob.Id))
+                    if (CONCURRENT_CACHE.IsEmpty || !CONCURRENT_CACHE.ContainsKey(workJob.LeagueId))
                     {
-                        CONCURRENT_CACHE.TryAdd(workJob.Id, true);
+                        CONCURRENT_CACHE.TryAdd(workJob.LeagueId, true);
                     }
                 }
             }
@@ -90,7 +90,7 @@ namespace LeagueManagement.thaind.backend
             {
                 var dhMatchDao = new DhMatchDAO();
                 var dhLeagueRankingDao = new DhLeagueRankingDAO();
-                var listMatches = dhMatchDao.GetMatchesByLeagueId(leagueId);
+                var listMatches = dhMatchDao.GetListFinishedMatchesByLeagueId(leagueId);
                 var localCaches = new ConcurrentDictionary<int, bool>();
                 foreach (var dbEntity in listMatches)
                 {

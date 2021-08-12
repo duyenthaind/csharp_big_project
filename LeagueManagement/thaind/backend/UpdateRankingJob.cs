@@ -2,6 +2,7 @@
 {
     public class UpdateRankingJob : BaseJob
     {
+        //This param stands for a "match_id" + _ + match_id 
         private string id;
         private long timeStart;
 

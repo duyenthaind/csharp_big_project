@@ -5,12 +5,12 @@ namespace LeagueManagement.thaind.backend
     public class HardResetRankingJob : BaseJob
     {
         //This param stands for league_id
-        private int id;
+        private int leagueId;
 
-        public int Id
+        public int LeagueId
         {
-            get => id;
-            set => id = value;
+            get => leagueId;
+            set => leagueId = value;
         }
     }
 }
