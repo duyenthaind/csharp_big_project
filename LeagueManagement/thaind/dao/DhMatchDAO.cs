@@ -24,9 +24,9 @@ namespace LeagueManagement.thaind.dao
             try
             {
                 result = 1;
-                var databaseObject = DatabaseObject.GetDatabaseContext();
-                databaseObject.DhMatches.InsertOnSubmit(entity);
-                databaseObject.SubmitChanges();
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                databaseContext.DhMatches.InsertOnSubmit(entity);
+                databaseContext.SubmitChanges();
             }
             catch (Exception ex)
             {
@@ -41,8 +41,8 @@ namespace LeagueManagement.thaind.dao
             var result = 1;
             try
             {
-                var databaseObject = DatabaseObject.GetDatabaseContext();
-                var dhMatches = databaseObject.DhMatches;
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                var dhMatches = databaseContext.DhMatches;
                 var toUpdate = dhMatches.First(p => p.Id == entity.Id);
                 toUpdate.LeagueId = entity.LeagueId;
                 toUpdate.SeasonId = entity.SeasonId;
@@ -52,7 +52,7 @@ namespace LeagueManagement.thaind.dao
                 toUpdate.TeamAwayGoal = entity.TeamAwayGoal;
                 toUpdate.StartTime = entity.StartTime;
                 toUpdate.EndTime = entity.EndTime;
-                databaseObject.SubmitChanges();
+                databaseContext.SubmitChanges();
             }
             catch (Exception ex)
             {
@@ -79,8 +79,8 @@ namespace LeagueManagement.thaind.dao
         {
             try
             {
-                var databaseObject = DatabaseObject.GetDatabaseContext();
-                var dhMatches = databaseObject.DhMatches;
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                var dhMatches = databaseContext.DhMatches;
                 var toDelete = dhMatches.First(p => p.Id == entity.Id);
                 dhMatches.DeleteOnSubmit(toDelete);
             }
@@ -112,8 +112,8 @@ namespace LeagueManagement.thaind.dao
             {
                 if (useLinq)
                 {
-                    var databaseObject = DatabaseObject.GetDatabaseContext();
-                    var dhMatches = databaseObject.DhMatches;
+                    var databaseContext = DatabaseObject.GetDatabaseContext();
+                    var dhMatches = databaseContext.DhMatches;
                     dhMatches.Where(p => p.Id == id);
                     var list = dhMatches.ToList();
                     if (list.Any())
@@ -125,6 +125,23 @@ namespace LeagueManagement.thaind.dao
             catch (Exception ex)
             {
                 Log.Error("Get match by id error, trace: ", ex);
+            }
+
+            return result;
+        }
+
+        public List<DhMatch> GetMatchesByLeagueId(int leagueId)
+        {
+            var result = new List<DhMatch>();
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                var dhMatches = databaseContext.DhMatches.Where(p => p.LeagueId == leagueId);
+                result = dhMatches.ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error get all match by league_id, trace: ", ex);
             }
 
             return result;
