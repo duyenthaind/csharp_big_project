@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using LeagueManagement.thaind.entity;
 using LeagueManagement.thaind.mapper;
 using log4net;
+using Newtonsoft.Json;
 
 namespace LeagueManagement.thaind.dao
 {
@@ -17,7 +19,7 @@ namespace LeagueManagement.thaind.dao
 
         private const string QueryInsertData =
             "insert into dh_league_ranking(league_id,season_id,team_id,point,num_win,num_draw,num_lost,played_matches,difference) output inserted.id"
-            + " values (@leagueId, @seasonID, @teamId, @point, @numWin, @numDraw, @numLost,@playedMatches, @diffrence) ";
+            + " values (@leagueId, @seasonId, @teamId, @point, @numWin, @numDraw, @numLost,@playedMatches, @difference) ";
 
         private const string QueryUpdateData =
             "update dh_league_ranking set league_id=@leagueId, season_id=@seasonId, team_id=@teamId, point=@point, num_win=@numWin, num_draw=@numDraw,"
@@ -28,7 +30,7 @@ namespace LeagueManagement.thaind.dao
         private const string QueryDeleteButId = "delete from dh_league_ranking where id!=@id";
 
         private const string QueryGetByLeagueSeasonTeam =
-            "select *from dh_league_ranking where leaguage_id=@leagueId and season_id=@seasonId and team_id=@teamId";
+            "select *from dh_league_ranking where league_id=@leagueId and season_id=@seasonId and team_id=@teamId";
 
         public override int Save(DhLeagueRanking entity)
         {
@@ -93,6 +95,7 @@ namespace LeagueManagement.thaind.dao
         {
             if (entity == null) return;
             var parameters = new Dictionary<string, object>();
+            parameters.Add("id", entity.Id);
             AbstractDAO.ExecuteNonQuery(QueryDeleteById, parameters);
         }
 
@@ -198,10 +201,9 @@ namespace LeagueManagement.thaind.dao
                 {
                     var databaseObject = DatabaseObject.GetDatabaseContext();
                     var dhLeagueRankings = databaseObject.DhLeagueRankings;
-                    dhLeagueRankings.Where(p => p.LeagueId == leagueId);
-                    dhLeagueRankings.Where(p => p.SeasonId == seasonId);
-                    dhLeagueRankings.Where(p => p.TeamId == teamId);
-                    var list = dhLeagueRankings.ToList();
+                    var query = dhLeagueRankings.Where(p =>
+                        (p.LeagueId == leagueId) && (p.SeasonId == seasonId) && (p.TeamId == teamId));
+                    var list = query.ToList();
                     if (list.Any())
                     {
                         result = list[0];
@@ -240,6 +242,80 @@ namespace LeagueManagement.thaind.dao
             {
                 Log.Error("Error, trace: ", ex);
             }
+        }
+
+        public void Save(DhLeagueRanking entity, bool useLinq)
+        {
+            try
+            {
+                if (useLinq)
+                {
+                    var dbObject = DatabaseObject.GetDatabaseContext();
+                    dbObject.DhLeagueRankings.InsertOnSubmit(entity);
+                    dbObject.SubmitChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, trace: ", ex);
+            }
+        }
+
+        public DataTable GetDataTableAllRankingByLeagueId(int leagueId)
+        {
+            DataTable result = null;
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                var query = from ranking in databaseContext.DhLeagueRankings
+                    where ranking.LeagueId == leagueId
+                    orderby ranking.Point
+                    select ranking;
+                var list = query.ToList();
+                var json = JsonConvert.SerializeObject(list);
+                result = JsonConvert.DeserializeObject<DataTable>(json);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, trace: ", ex);
+            }
+
+            return result;
+        }
+
+        public List<DhLeagueRanking> GetListAllRankingByLeagueId(int leagueId)
+        {
+            var result = new List<DhLeagueRanking>();
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                var query = databaseContext.DhLeagueRankings.Where(p => p.LeagueId == leagueId);
+                result = query.ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, trace: ", ex);
+            }
+
+            return result;
+        }
+
+        public List<DhLeagueRanking> GetListAllRankingByLeagueSeasonId(int leagueId, int seasonId)
+        {
+            var result = new List<DhLeagueRanking>();
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                var query = databaseContext.DhLeagueRankings.Where(p =>
+                    (p.LeagueId == leagueId) && (p.SeasonId == seasonId));
+                result = query.ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, trace: ", ex);
+            }
+
+            return result;
         }
     }
 }

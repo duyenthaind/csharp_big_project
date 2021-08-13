@@ -1,16 +1,31 @@
 ﻿// @author duyenthai
 
+using System;
+using System.Data;
+using System.Linq;
+using LeagueManagement.thaind.dao;
 using LeagueManagement.thaind.entity;
+using log4net;
+using Newtonsoft.Json;
 
 namespace LeagueManagement.thaind.common
 {
     public class DbUtil
     {
-        public static DhLeagueRanking CreateNewRankingEntityFromMatch(DhMatch dbEntity)
+        private static readonly ILog Log = LogManager.GetLogger(typeof(DbUtil));
+        public static DhLeagueRanking CreateNewRankingEntityFromMatch(DhMatch dbEntity, bool isHost)
         {
             var dhNewLeagueRanking = new DhLeagueRanking();
             dhNewLeagueRanking.LeagueId = dbEntity.LeagueId;
             dhNewLeagueRanking.SeasonId = dbEntity.SeasonId;
+            if (isHost)
+            {
+                dhNewLeagueRanking.TeamId = dbEntity.TeamHostId;
+            }
+            else
+            {
+                dhNewLeagueRanking.TeamId = dbEntity.TeamAwayId;
+            }
             return dhNewLeagueRanking;
         }
 
@@ -65,6 +80,46 @@ namespace LeagueManagement.thaind.common
             dhLeagueRanking.PlayedMatches += gainPlayedMatches;
             dhLeagueRanking.Difference += gainDifference;
             return dhLeagueRanking;
+        }
+
+        public static DataTable GetTemporaryRankingByLeagueSeasonId(int leagueId, int seasonId)
+        {
+            DataTable result = null;
+            try
+            {
+                var dhMatchDao = new DhMatchDAO();
+                var dhLeagueRankingDao = new DhLeagueRankingDAO();
+                var dhMatches = dhMatchDao.GetListMatchesByLeagueSeasonId(leagueId, seasonId);
+                var dhLeagueRankings = dhLeagueRankingDao.GetListAllRankingByLeagueSeasonId(leagueId,seasonId);
+
+                var unFinishedMatches = dhMatches.Where(p => p.EndTime > DateTimeOffset.Now.ToUnixTimeMilliseconds()).ToList();
+                unFinishedMatches.ForEach((match =>
+                {
+                    var dhRankingHost = dhLeagueRankings.First(p => p.TeamId == match.TeamHostId);
+                    var dhRankingAway = dhLeagueRankings.First(p => p.TeamId == match.TeamAwayId);
+
+                    dhLeagueRankings.Remove(dhRankingHost);
+                    dhLeagueRankings.Remove(dhRankingAway);
+
+                    dhRankingHost = UpdateRankingEntityWithMatch(dhRankingHost, match);
+                    dhRankingAway = UpdateRankingEntityWithMatch(dhRankingAway, match);
+                    
+                    dhLeagueRankings.Add(dhRankingHost);
+                    dhLeagueRankings.Add(dhRankingAway);
+                }));
+
+                dhLeagueRankings.Sort((first, second) => first.Point.CompareTo(second.Point));
+                dhLeagueRankings.Reverse();
+
+                var json = JsonConvert.SerializeObject(dhLeagueRankings);
+                result = JsonConvert.DeserializeObject<DataTable>(json);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error get temporary ranking, trace: ", ex);
+            }
+
+            return result;
         }
     }
 }

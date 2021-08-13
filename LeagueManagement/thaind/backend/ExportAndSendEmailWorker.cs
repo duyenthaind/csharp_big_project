@@ -50,6 +50,7 @@ namespace LeagueManagement.thaind.backend
                 Log.Info("Try do job: " + job);
                 if (job.GetType() == typeof(ExportAndSendEmailJob))
                 {
+                        
                 }
             }
             catch (Exception ex)

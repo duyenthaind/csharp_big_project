@@ -2,16 +2,17 @@
 {
     public class UpdateRankingJob : BaseJob
     {
-        private string id;
+        //This param stands for a "match_id" + _ + match_id 
+        private int id;
         private long timeStart;
 
-        public UpdateRankingJob(string id, long timeStart)
+        public UpdateRankingJob(int id, long timeStart)
         {
             this.id = id;
             this.timeStart = timeStart;
         }
 
-        public string Id
+        public int Id
         {
             get => id;
             set => id = value;
