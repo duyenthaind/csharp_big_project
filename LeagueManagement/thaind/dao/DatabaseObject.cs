@@ -23,6 +23,8 @@ namespace LeagueManagement.thaind.dao
 
         public Table<DhLeagueRanking> DhLeagueRankings;
         public Table<DhMatch> DhMatches;
+        public Table<DhLeague> DhLeagues;
+        public Table<DhNation> DhNations;
 
         public static void Test()
         {

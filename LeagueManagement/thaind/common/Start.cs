@@ -48,8 +48,6 @@ namespace LeagueManagement.thaind.common
             
             BaseWorker.PubJob(typeof(ExportAndSendEmailWorker),-1,job1);*/
 
-            HardResetRankingJob job = new HardResetRankingJob(1, 3);
-            BaseWorker.PubJob(typeof(HardResetRankingWorker), -1, job);
             BaseWorker.PrintAllWorker();
         }
     }

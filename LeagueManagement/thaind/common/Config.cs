@@ -13,6 +13,8 @@ namespace LeagueManagement.thaind.common
         
         public static int RANKING_WORKER_INTERVAL = 0;
 
+        public static string EXPORT_FILE_DIR = "./";
+
         public static void LoadConfig()
         {
             try
@@ -22,6 +24,12 @@ namespace LeagueManagement.thaind.common
                 if (isExistRankingWorkerInterval)
                 {
                     RANKING_WORKER_INTERVAL = value.ToObject<int>();
+                }
+
+                var isExistFileExportDir = json.TryGetValue("export_file_dir", out var exportFileDir);
+                if (isExistFileExportDir)
+                {
+                    EXPORT_FILE_DIR = @exportFileDir.ToObject<string>();
                 }
             }
             catch (Exception ex)
