@@ -145,6 +145,23 @@ namespace LeagueManagement.thaind.dao
 
             return result;
         }
+        
+        public List<DhMatch> GetListMatchesByLeagueSeasonId(int leagueId, int seasonId)
+        {
+            var result = new List<DhMatch>();
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                var dhMatches = databaseContext.DhMatches.Where(p => (p.LeagueId == leagueId)&&(p.SeasonId == seasonId));
+                result = dhMatches.ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error get all match by league_id, trace: ", ex);
+            }
+
+            return result;
+        }
 
         public List<DhMatch> GetListFinishedMatchesByLeagueId(int leagueId)
         {
@@ -153,12 +170,30 @@ namespace LeagueManagement.thaind.dao
             {
                 var databaseContext = DatabaseObject.GetDatabaseContext();
                 var dhMatches = databaseContext.DhMatches.Where(p =>
-                    (p.LeagueId == leagueId) && (p.EndTime < DateTime.Now.Millisecond));
+                    (p.LeagueId == leagueId) && (p.EndTime < DateTimeOffset.Now.ToUnixTimeMilliseconds()));
                 result = dhMatches.ToList();
             }
             catch (Exception ex)
             {
                 Log.Error("Error get all finished match by league_id, trace: ", ex);
+            }
+
+            return result;
+        }
+
+        public List<DhMatch> GetListFinishedMatchesByLeagueSeasonId(int leagueId, int seasonId)
+        {
+            var result = new List<DhMatch>();
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                var queryDhMatches = databaseContext.DhMatches.Where(p =>
+                    (p.LeagueId == leagueId) && (p.SeasonId == seasonId) && (p.EndTime < DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                result = queryDhMatches.ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error get all finished matches by league and season id, trace: ", ex);
             }
 
             return result;

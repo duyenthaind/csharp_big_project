@@ -13,11 +13,19 @@ namespace LeagueManagement.thaind.common
     public class DbUtil
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(DbUtil));
-        public static DhLeagueRanking CreateNewRankingEntityFromMatch(DhMatch dbEntity)
+        public static DhLeagueRanking CreateNewRankingEntityFromMatch(DhMatch dbEntity, bool isHost)
         {
             var dhNewLeagueRanking = new DhLeagueRanking();
             dhNewLeagueRanking.LeagueId = dbEntity.LeagueId;
             dhNewLeagueRanking.SeasonId = dbEntity.SeasonId;
+            if (isHost)
+            {
+                dhNewLeagueRanking.TeamId = dbEntity.TeamHostId;
+            }
+            else
+            {
+                dhNewLeagueRanking.TeamId = dbEntity.TeamAwayId;
+            }
             return dhNewLeagueRanking;
         }
 
@@ -74,17 +82,17 @@ namespace LeagueManagement.thaind.common
             return dhLeagueRanking;
         }
 
-        public static DataTable GetTemporaryRankingByLeagueId(int leagueId)
+        public static DataTable GetTemporaryRankingByLeagueSeasonId(int leagueId, int seasonId)
         {
             DataTable result = null;
             try
             {
                 var dhMatchDao = new DhMatchDAO();
                 var dhLeagueRankingDao = new DhLeagueRankingDAO();
-                var dhMatches = dhMatchDao.GetListMatchesByLeagueId(leagueId);
-                var dhLeagueRankings = dhLeagueRankingDao.GetListAllRankingByLeagueId(leagueId);
+                var dhMatches = dhMatchDao.GetListMatchesByLeagueSeasonId(leagueId, seasonId);
+                var dhLeagueRankings = dhLeagueRankingDao.GetListAllRankingByLeagueSeasonId(leagueId,seasonId);
 
-                var unFinishedMatches = dhMatches.Where(p => p.EndTime > DateTime.Now.Millisecond).ToList();
+                var unFinishedMatches = dhMatches.Where(p => p.EndTime > DateTimeOffset.Now.ToUnixTimeMilliseconds()).ToList();
                 unFinishedMatches.ForEach((match =>
                 {
                     var dhRankingHost = dhLeagueRankings.First(p => p.TeamId == match.TeamHostId);

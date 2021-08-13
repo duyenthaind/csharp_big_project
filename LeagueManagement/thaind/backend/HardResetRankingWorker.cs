@@ -13,9 +13,10 @@ namespace LeagueManagement.thaind.backend
 {
     public class HardResetRankingWorker : BaseWorker
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(BaseWorker));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(HardResetRankingWorker));
 
-        private readonly ConcurrentDictionary<int, bool> CONCURRENT_CACHE = new ConcurrentDictionary<int, bool>();
+        private readonly ConcurrentDictionary<string, HardResetRankingJob> CONCURRENT_CACHE =
+            new ConcurrentDictionary<string, HardResetRankingJob>();
 
         private bool _running = true;
 
@@ -52,13 +53,16 @@ namespace LeagueManagement.thaind.backend
                 {
                     foreach (var entry in CONCURRENT_CACHE)
                     {
-                        if (entry.Value)
+                        if (entry.Value != null)
                         {
-                            ProcessRefresh(entry.Key);
+                            Log.Info($"Process job with id: {entry.Key}");
+                            ProcessRefresh(entry.Value);
+                            Log.Info($"Remove job with {entry.Key}");
+                            CONCURRENT_CACHE.TryRemove(entry.Key, out var isOk);
                         }
                     }
                 }
-                
+
                 //This worker requires response immediately, do not sleep it
             }
         }
@@ -76,21 +80,41 @@ namespace LeagueManagement.thaind.backend
                 lock (CONCURRENT_CACHE)
                 {
                     var workJob = (HardResetRankingJob) job;
-                    if (CONCURRENT_CACHE.IsEmpty || !CONCURRENT_CACHE.ContainsKey(workJob.LeagueId))
+                    var key = "league_" + workJob.LeagueId + "_season_" + workJob.SeasonId;
+                    if (CONCURRENT_CACHE.IsEmpty || !CONCURRENT_CACHE.ContainsKey(key))
                     {
-                        CONCURRENT_CACHE.TryAdd(workJob.LeagueId, true);
+                        CONCURRENT_CACHE.TryAdd(key, workJob);
                     }
                 }
             }
         }
 
-        private void ProcessRefresh(int leagueId)
+        private void ProcessRefresh(HardResetRankingJob job)
         {
             try
             {
                 var dhMatchDao = new DhMatchDAO();
                 var dhLeagueRankingDao = new DhLeagueRankingDAO();
-                var listMatches = dhMatchDao.GetListFinishedMatchesByLeagueId(leagueId);
+                /*Delete duplicate record*/
+                var listLeagueRankingByLeagueSeason =
+                    dhLeagueRankingDao.GetListAllRankingByLeagueSeasonId(job.LeagueId, job.SeasonId);
+                // (teamId,true)
+                var cachesCheckDuplicateRanking = new ConcurrentDictionary<int, bool>();
+                listLeagueRankingByLeagueSeason.ForEach(ranking =>
+                {
+                    if (cachesCheckDuplicateRanking.ContainsKey(ranking.TeamId))
+                    {
+                        dhLeagueRankingDao.Delete(ranking);
+                    }
+                    else
+                    {
+                        cachesCheckDuplicateRanking.TryAdd(ranking.TeamId, true);
+                    }
+                });
+                /*End check duplicate record*/
+
+                var listMatches = dhMatchDao.GetListFinishedMatchesByLeagueSeasonId(job.LeagueId, job.SeasonId);
+                /*Reset record go here*/
                 var localCaches = new ConcurrentDictionary<int, bool>();
                 foreach (var dbEntity in listMatches)
                 {
@@ -99,21 +123,20 @@ namespace LeagueManagement.thaind.backend
                             dbEntity.TeamHostId, true);
                     if (dhCurrentLeagueRankingHost == null)
                     {
-                        dhCurrentLeagueRankingHost = DbUtil.CreateNewRankingEntityFromMatch(dbEntity);
+                        dhCurrentLeagueRankingHost = CreateNewAndUpdate(dbEntity, true);
+                        localCaches.TryAdd(dhCurrentLeagueRankingHost.TeamId, true);
                     }
                     else
                     {
-                        localCaches.TryGetValue(dhCurrentLeagueRankingHost.TeamId, out var hasReset);
-                        if (hasReset)
+                        localCaches.TryGetValue(dhCurrentLeagueRankingHost.TeamId, out var hasResetHost);
+                        if (hasResetHost)
                         {
                             dhCurrentLeagueRankingHost =
                                 DbUtil.UpdateRankingEntityWithMatch(dhCurrentLeagueRankingHost, dbEntity);
                         }
                         else
                         {
-                            var oldId = dhCurrentLeagueRankingHost.Id;
-                            dhCurrentLeagueRankingHost = DbUtil.CreateNewRankingEntityFromMatch(dbEntity);
-                            dhCurrentLeagueRankingHost.Id = oldId;
+                            dhCurrentLeagueRankingHost = CreateNewAndUpdate(dbEntity, true);
                             localCaches.TryAdd(dhCurrentLeagueRankingHost.TeamId, true);
                         }
                     }
@@ -123,29 +146,26 @@ namespace LeagueManagement.thaind.backend
                             dbEntity.TeamAwayId, true);
                     if (dhCurrentLeagueRankingAway == null)
                     {
-                        dhCurrentLeagueRankingAway = DbUtil.CreateNewRankingEntityFromMatch(dbEntity);
+                        dhCurrentLeagueRankingAway = CreateNewAndUpdate(dbEntity, false);
+                        localCaches.TryAdd(dhCurrentLeagueRankingAway.TeamId, true);
                     }
                     else
                     {
-                        localCaches.TryGetValue(dhCurrentLeagueRankingHost.TeamId, out var hasReset);
-                        if (hasReset)
+                        localCaches.TryGetValue(dhCurrentLeagueRankingAway.TeamId, out var hasResetAway);
+                        if (hasResetAway)
                         {
                             dhCurrentLeagueRankingAway =
                                 DbUtil.UpdateRankingEntityWithMatch(dhCurrentLeagueRankingAway, dbEntity);
                         }
                         else
                         {
-                            var oldId = dhCurrentLeagueRankingAway.Id;
-                            dhCurrentLeagueRankingAway = DbUtil.CreateNewRankingEntityFromMatch(dbEntity);
-                            dhCurrentLeagueRankingAway =
-                                DbUtil.UpdateRankingEntityWithMatch(dhCurrentLeagueRankingAway, dbEntity);
-                            dhCurrentLeagueRankingAway.Id = oldId;
+                            dhCurrentLeagueRankingAway = CreateNewAndUpdate(dbEntity, false);
                             localCaches.TryAdd(dhCurrentLeagueRankingAway.TeamId, true);
                         }
                     }
 
                     Log.Info(
-                        $"Updating league ranking, host_team_id: {dbEntity.TeamHostId}, away_team_id: {dbEntity.TeamAwayId} ");
+                        $"Resetting league ranking, host_team_id: {dbEntity.TeamHostId}, away_team_id: {dbEntity.TeamAwayId} ");
                     dhLeagueRankingDao.SaveOrUpdate(dhCurrentLeagueRankingHost);
                     dhLeagueRankingDao.SaveOrUpdate(dhCurrentLeagueRankingAway);
                 }
@@ -154,6 +174,12 @@ namespace LeagueManagement.thaind.backend
             {
                 Log.Error("Error ", ex);
             }
+        }
+
+        private DhLeagueRanking CreateNewAndUpdate(DhMatch match, bool isHost)
+        {
+            var newDhLeagueRanking = DbUtil.CreateNewRankingEntityFromMatch(match, isHost);
+            return DbUtil.UpdateRankingEntityWithMatch(newDhLeagueRanking, match);
         }
     }
 }

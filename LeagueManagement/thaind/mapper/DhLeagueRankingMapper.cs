@@ -27,7 +27,7 @@ namespace LeagueManagement.thaind.mapper
                 result.NumDraw = Convert.ToInt32(row["num_draw"]);
                 result.NumLost = Convert.ToInt32(row["num_lost"]);
                 result.PlayedMatches = Convert.ToInt32(row["played_matches"]);
-                result.Difference = Convert.ToInt32(row["differnce"]);
+                result.Difference = Convert.ToInt32(row["difference"]);
             }
             catch (Exception ex)
             {
