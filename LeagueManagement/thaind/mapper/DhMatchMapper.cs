@@ -26,6 +26,7 @@ namespace LeagueManagement.thaind.mapper
                 result.TeamAwayGoal = Convert.ToInt32(row["team_away_goal"]);
                 result.StartTime = Convert.ToInt64(row["start_time"]);
                 result.EndTime = Convert.ToInt64(row["end_time"]);
+                result.IsFinalResult = Convert.ToBoolean(row["is_final_result"]);
             }
             catch (Exception ex)
             {
@@ -46,6 +47,7 @@ namespace LeagueManagement.thaind.mapper
             result.Add("team_away_id", entity.TeamAwayId);
             result.Add("start_time", entity.StartTime);
             result.Add("end_time", entity.EndTime);
+            result.Add("is_final_result", entity.IsFinalResult);
             return result;
         }
     }

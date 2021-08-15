@@ -108,8 +108,8 @@ namespace LeagueManagement.thaind.common
                     dhLeagueRankings.Add(dhRankingAway);
                 }));
 
-                dhLeagueRankings.Sort((first, second) => first.Point.CompareTo(second.Point));
-                dhLeagueRankings.Reverse();
+                dhLeagueRankings = dhLeagueRankings.OrderByDescending(p => p.Point).ThenBy(p => p.Difference).ThenBy(p => p.NumWin)
+                    .ThenBy(p => p.TeamId).ToList();
 
                 var json = JsonConvert.SerializeObject(dhLeagueRankings);
                 result = JsonConvert.DeserializeObject<DataTable>(json);

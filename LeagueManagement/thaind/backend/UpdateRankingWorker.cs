@@ -94,7 +94,7 @@ namespace LeagueManagement.thaind.backend
             try
             {
                 var dbEntity = dhMatchDao.GetById(job.Id, true);
-                if (dbEntity == null)
+                if (dbEntity == null || !dbEntity.IsFinalResult)
                 {
                     return;
                 }

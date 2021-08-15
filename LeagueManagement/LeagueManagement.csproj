@@ -111,6 +111,8 @@
         <Compile Include="thaind\entity\DhLeagueRanking.cs" />
         <Compile Include="thaind\entity\DhMatch.cs" />
         <Compile Include="thaind\entity\DhNation.cs" />
+        <Compile Include="thaind\entity\DhSeason.cs" />
+        <Compile Include="thaind\entity\DhTeam.cs" />
         <Compile Include="thaind\mapper\AbstractRowMapper.cs" />
         <Compile Include="thaind\mapper\DhLeagueRankingMapper.cs" />
         <Compile Include="thaind\mapper\DhMatchMapper.cs" />
