@@ -17,6 +17,8 @@ namespace LeagueManagement.thaind.entity
         private int numLost = 0;
         private int playedMatches = 0;
         private int difference = 0;
+        private int numGoalScored = 0;
+        private int numGoalReceived = 0;
 
         public DhLeagueRanking()
         {
@@ -90,6 +92,20 @@ namespace LeagueManagement.thaind.entity
         {
             get => difference;
             set => difference = value;
+        }
+
+        [Column(Name = "num_goal_scored")]
+        public int NumGoalScored
+        {
+            get => numGoalScored;
+            set => numGoalScored = value;
+        }
+
+        [Column(Name = "num_goal_received")]
+        public int NumGoalReceived
+        {
+            get => numGoalReceived;
+            set => numGoalReceived = value;
         }
     }
 }

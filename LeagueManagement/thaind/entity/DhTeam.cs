@@ -8,7 +8,7 @@ namespace LeagueManagement.thaind.entity
     public class DhTeam
     {
         private int id;
-        private int name;
+        private string name;
         private string host;
         private int nationId;
         private int numAtheletes;
@@ -25,7 +25,7 @@ namespace LeagueManagement.thaind.entity
         }
 
         [Column(Name = "name")]
-        public int Name
+        public string Name
         {
             get => name;
             set => name = value;

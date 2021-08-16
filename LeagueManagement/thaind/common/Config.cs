@@ -30,6 +30,21 @@ namespace LeagueManagement.thaind.common
                 if (isExistFileExportDir)
                 {
                     EXPORT_FILE_DIR = @exportFileDir.ToObject<string>();
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(EXPORT_FILE_DIR))
+                        {
+                            if (!Directory.Exists(EXPORT_FILE_DIR))
+                            {
+                                Directory.CreateDirectory(EXPORT_FILE_DIR);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Create export directory error, ", ex);
+                    }
+                    
                 }
             }
             catch (Exception ex)

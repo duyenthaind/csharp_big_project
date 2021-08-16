@@ -43,10 +43,8 @@ namespace LeagueManagement.thaind.common
             exportAndSendEmailWorker.Register();
             exportAndSendEmailWorker.Start();
 
-            /*ExportAndSendEmailJob job1 = new ExportAndSendEmailJob();
-            job1.LeagueId = 1;
-            
-            BaseWorker.PubJob(typeof(ExportAndSendEmailWorker),-1,job1);*/
+            ExportAndSendEmailJob job1 = new ExportAndSendEmailJob(1, 3);
+            BaseWorker.PubJob(typeof(ExportAndSendEmailWorker),-1,job1);
 
             BaseWorker.PrintAllWorker();
         }

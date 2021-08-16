@@ -39,6 +39,8 @@ namespace LeagueManagement.thaind.common
             var gainLost = 0;
             var gainPlayedMatches = 1;
             var gainDifference = 0;
+            var gainGoalScored = isHost ? dhMatch.TeamHostGoal : dhMatch.TeamAwayGoal;
+            var gainGoalReceived = isHost ? dhMatch.TeamAwayGoal : dhMatch.TeamHostGoal;
             if (positiveGoal > 0)
             {
                 if (isHost)
@@ -79,6 +81,8 @@ namespace LeagueManagement.thaind.common
             dhLeagueRanking.NumLost += gainLost;
             dhLeagueRanking.PlayedMatches += gainPlayedMatches;
             dhLeagueRanking.Difference += gainDifference;
+            dhLeagueRanking.NumGoalScored += gainGoalScored;
+            dhLeagueRanking.NumGoalReceived += gainGoalReceived;
             return dhLeagueRanking;
         }
 
@@ -89,7 +93,7 @@ namespace LeagueManagement.thaind.common
             {
                 var dhMatchDao = new DhMatchDAO();
                 var dhLeagueRankingDao = new DhLeagueRankingDAO();
-                var dhMatches = dhMatchDao.GetListMatchesByLeagueSeasonId(leagueId, seasonId);
+                var dhMatches = dhMatchDao.GetListStartedMatchesByLeagueSeasonId(leagueId, seasonId);
                 var dhLeagueRankings = dhLeagueRankingDao.GetListAllRankingByLeagueSeasonId(leagueId,seasonId);
 
                 var unFinishedMatches = dhMatches.Where(p => p.EndTime > DateTimeOffset.Now.ToUnixTimeMilliseconds()).ToList();

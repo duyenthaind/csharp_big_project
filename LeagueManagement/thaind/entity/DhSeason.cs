@@ -4,7 +4,7 @@ using System.Data.Linq.Mapping;
 
 namespace LeagueManagement.thaind.entity
 {
-    [Table(Name = "dh_nation")]
+    [Table(Name = "dh_season")]
     public class DhSeason
     {
         private int id;

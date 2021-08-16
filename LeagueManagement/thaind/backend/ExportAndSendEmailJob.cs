@@ -8,6 +8,12 @@ namespace LeagueManagement.thaind.backend
 
         private int seasonId;
 
+        public ExportAndSendEmailJob(int leagueId, int seasonId)
+        {
+            this.leagueId = leagueId;
+            this.seasonId = seasonId;
+        }
+
         public int LeagueId
         {
             get => leagueId;

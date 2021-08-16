@@ -18,12 +18,13 @@ namespace LeagueManagement.thaind.dao
         private static readonly DhLeagueRankingMapper DhLeagueRankingMapper = new DhLeagueRankingMapper();
 
         private const string QueryInsertData =
-            "insert into dh_league_ranking(league_id,season_id,team_id,point,num_win,num_draw,num_lost,played_matches,difference) output inserted.id"
-            + " values (@leagueId, @seasonId, @teamId, @point, @numWin, @numDraw, @numLost,@playedMatches, @difference) ";
+            "insert into dh_league_ranking(league_id,season_id,team_id,point,num_win,num_draw,num_lost,played_matches,difference, num_goal_scored, num_goal_received) output inserted.id"
+            + " values (@leagueId, @seasonId, @teamId, @point, @numWin, @numDraw, @numLost,@playedMatches, @difference, @numGoalScored, @numGoalReceived) ";
 
         private const string QueryUpdateData =
             "update dh_league_ranking set league_id=@leagueId, season_id=@seasonId, team_id=@teamId, point=@point, num_win=@numWin, num_draw=@numDraw,"
-            + " num_lost=@numLost, played_match=@playedMatches, differnce=@difference where id=@id";
+            + " num_lost=@numLost, played_match=@playedMatches, difference=@difference, num_goal_scored=@numGoalScored, num_goal_received=@numGoalReceived " 
+            + " where id=@id";
 
         private const string QueryDeleteById = "delete from dh_league_ranking where id=@id";
         private const string QueryGetById = "select top 1 *from dh_league_ranking where id=@id";
