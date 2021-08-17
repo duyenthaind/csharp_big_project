@@ -113,6 +113,12 @@
         <Compile Include="thaind\entity\DhNation.cs" />
         <Compile Include="thaind\entity\DhSeason.cs" />
         <Compile Include="thaind\entity\DhTeam.cs" />
+        <Compile Include="thaind\frontend\LeagueRankingViewForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="thaind\frontend\LeagueRankingViewForm.Designer.cs">
+          <DependentUpon>LeagueRankingViewForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="thaind\mapper\AbstractRowMapper.cs" />
         <Compile Include="thaind\mapper\DhLeagueRankingMapper.cs" />
         <Compile Include="thaind\mapper\DhMatchMapper.cs" />
@@ -134,6 +140,9 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <EmbeddedResource Include="thaind\frontend\LeagueRankingViewForm.resx">
+          <DependentUpon>LeagueRankingViewForm.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="thaind\TestForm.resx">
           <DependentUpon>TestForm.cs</DependentUpon>
         </EmbeddedResource>
@@ -161,9 +170,6 @@
       <Content Include="config\log4net.xml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="thaind\frontend" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

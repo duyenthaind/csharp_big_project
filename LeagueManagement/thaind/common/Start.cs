@@ -25,13 +25,13 @@ namespace LeagueManagement.thaind.common
 
         private static void InitWorker()
         {
-            for (var index = -1; ++index < 2;)
+            /*for (var index = -1; ++index < 2;)
             {
                 var updateRankingWorker =
                     new UpdateRankingWorker("UpdateRankingWorker_" + index);
                 updateRankingWorker.Register();
                 updateRankingWorker.Start();
-            }
+            }*/
 
             var hardResetRankingWorker =
                 new HardResetRankingWorker("HardResetRankingWorker_0");
@@ -43,8 +43,8 @@ namespace LeagueManagement.thaind.common
             exportAndSendEmailWorker.Register();
             exportAndSendEmailWorker.Start();
 
-            ExportAndSendEmailJob job1 = new ExportAndSendEmailJob(1, 3);
-            BaseWorker.PubJob(typeof(ExportAndSendEmailWorker),-1,job1);
+            /*ExportAndSendEmailJob job1 = new ExportAndSendEmailJob(1, 3);
+            BaseWorker.PubJob(typeof(ExportAndSendEmailWorker),-1,job1);*/
 
             BaseWorker.PrintAllWorker();
         }
