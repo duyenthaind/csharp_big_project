@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using LeagueManagement.thaind.common;
 using LeagueManagement.thaind.entity;
 using LeagueManagement.thaind.mapper;
 using log4net;
@@ -18,12 +19,13 @@ namespace LeagueManagement.thaind.dao
         private static readonly DhLeagueRankingMapper DhLeagueRankingMapper = new DhLeagueRankingMapper();
 
         private const string QueryInsertData =
-            "insert into dh_league_ranking(league_id,season_id,team_id,point,num_win,num_draw,num_lost,played_matches,difference) output inserted.id"
-            + " values (@leagueId, @seasonId, @teamId, @point, @numWin, @numDraw, @numLost,@playedMatches, @difference) ";
+            "insert into dh_league_ranking(league_id,season_id,team_id,point,num_win,num_draw,num_lost,played_matches,difference, num_goal_scored, num_goal_received) output inserted.id"
+            + " values (@leagueId, @seasonId, @teamId, @point, @numWin, @numDraw, @numLost,@playedMatches, @difference, @numGoalScored, @numGoalReceived) ";
 
         private const string QueryUpdateData =
             "update dh_league_ranking set league_id=@leagueId, season_id=@seasonId, team_id=@teamId, point=@point, num_win=@numWin, num_draw=@numDraw,"
-            + " num_lost=@numLost, played_match=@playedMatches, differnce=@difference where id=@id";
+            + " num_lost=@numLost, played_match=@playedMatches, difference=@difference, num_goal_scored=@numGoalScored, num_goal_received=@numGoalReceived "
+            + " where id=@id";
 
         private const string QueryDeleteById = "delete from dh_league_ranking where id=@id";
         private const string QueryGetById = "select top 1 *from dh_league_ranking where id=@id";
@@ -31,6 +33,10 @@ namespace LeagueManagement.thaind.dao
 
         private const string QueryGetByLeagueSeasonTeam =
             "select *from dh_league_ranking where league_id=@leagueId and season_id=@seasonId and team_id=@teamId";
+
+        private const string QueryAllByLeagueSeason =
+            "select ROW_NUMBER() over(order by point desc, difference desc, num_win desc, num_lost asc) AS rowNum, name, point, num_win, num_draw, num_lost, played_matches, num_goal_scored, num_goal_received, difference "
+            + " from dh_league_ranking r join dh_team t on r.team_id = t.id where r.league_id=@leagueId and r.season_id=@seasonId order by point desc, difference desc, num_win desc, num_lost asc";
 
         public override int Save(DhLeagueRanking entity)
         {
@@ -261,19 +267,16 @@ namespace LeagueManagement.thaind.dao
             }
         }
 
-        public DataTable GetDataTableAllRankingByLeagueId(int leagueId)
+        public DataTable GetDataTableAllRankingByLeagueSeasonId(int leagueId, int seasonId)
         {
             DataTable result = null;
             try
             {
-                var databaseContext = DatabaseObject.GetDatabaseContext();
-                var query = from ranking in databaseContext.DhLeagueRankings
-                    where ranking.LeagueId == leagueId
-                    orderby ranking.Point
-                    select ranking;
-                var list = query.ToList();
-                var json = JsonConvert.SerializeObject(list);
-                result = JsonConvert.DeserializeObject<DataTable>(json);
+                var parameters = new Dictionary<string, object>();
+                parameters.Add("leagueId", leagueId);
+                parameters.Add("seasonId", seasonId);
+                result = AbstractDAO.FetchData(QueryAllByLeagueSeason, parameters);
+
             }
             catch (Exception ex)
             {
@@ -313,6 +316,42 @@ namespace LeagueManagement.thaind.dao
             catch (Exception ex)
             {
                 Log.Error("Error, trace: ", ex);
+            }
+
+            return result;
+        }
+
+        public DataTable GetDataTableMostWin(int leagueId, int seasonId)
+        {
+            DataTable result = null;
+            try
+            {
+                var listAllRankingByLeagueSeasonId = GetListAllRankingByLeagueSeasonId(leagueId, seasonId);
+                var mostWin = listAllRankingByLeagueSeasonId.Max(p => p.NumWin);
+                var listAllMostWin = listAllRankingByLeagueSeasonId.Where(p => p.NumWin == mostWin).ToList();
+                result = DbUtil.GetDisplayRankingFromDhLeagueRanking(listAllMostWin, listAllRankingByLeagueSeasonId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
+            }
+
+            return result;
+        }
+
+        public DataTable GetDataTableMostLost(int leagueId, int seasonId)
+        {
+            DataTable result = null;
+            try
+            {
+                var listAllRankingByLeagueSeasonId = GetListAllRankingByLeagueSeasonId(leagueId, seasonId);
+                var mostLost = listAllRankingByLeagueSeasonId.Max(p => p.NumLost);
+                var listAllMostLost = listAllRankingByLeagueSeasonId.Where(p => p.NumLost == mostLost).ToList();
+                result = DbUtil.GetDisplayRankingFromDhLeagueRanking(listAllMostLost, listAllRankingByLeagueSeasonId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
             }
 
             return result;

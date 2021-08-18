@@ -1,5 +1,7 @@
 ﻿// @author duyenthai
 
+using System.Windows.Forms;
+
 namespace LeagueManagement.thaind.backend
 {
     public class HardResetRankingJob : BaseJob
@@ -8,6 +10,8 @@ namespace LeagueManagement.thaind.backend
         private int leagueId;
 
         private int seasonId;
+
+        private Label lblMessage;
 
         public int LeagueId
         {
@@ -25,6 +29,12 @@ namespace LeagueManagement.thaind.backend
         {
             this.leagueId = leagueId;
             this.seasonId = seasonId;
+        }
+
+        public Label LblMessage
+        {
+            get => lblMessage;
+            set => lblMessage = value;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿// @author duyenthai
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using LeagueManagement.thaind.dao;
@@ -13,6 +14,7 @@ namespace LeagueManagement.thaind.common
     public class DbUtil
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(DbUtil));
+
         public static DhLeagueRanking CreateNewRankingEntityFromMatch(DhMatch dbEntity, bool isHost)
         {
             var dhNewLeagueRanking = new DhLeagueRanking();
@@ -26,6 +28,7 @@ namespace LeagueManagement.thaind.common
             {
                 dhNewLeagueRanking.TeamId = dbEntity.TeamAwayId;
             }
+
             return dhNewLeagueRanking;
         }
 
@@ -39,6 +42,8 @@ namespace LeagueManagement.thaind.common
             var gainLost = 0;
             var gainPlayedMatches = 1;
             var gainDifference = 0;
+            var gainGoalScored = isHost ? dhMatch.TeamHostGoal : dhMatch.TeamAwayGoal;
+            var gainGoalReceived = isHost ? dhMatch.TeamAwayGoal : dhMatch.TeamHostGoal;
             if (positiveGoal > 0)
             {
                 if (isHost)
@@ -79,6 +84,8 @@ namespace LeagueManagement.thaind.common
             dhLeagueRanking.NumLost += gainLost;
             dhLeagueRanking.PlayedMatches += gainPlayedMatches;
             dhLeagueRanking.Difference += gainDifference;
+            dhLeagueRanking.NumGoalScored += gainGoalScored;
+            dhLeagueRanking.NumGoalReceived += gainGoalReceived;
             return dhLeagueRanking;
         }
 
@@ -89,10 +96,12 @@ namespace LeagueManagement.thaind.common
             {
                 var dhMatchDao = new DhMatchDAO();
                 var dhLeagueRankingDao = new DhLeagueRankingDAO();
-                var dhMatches = dhMatchDao.GetListMatchesByLeagueSeasonId(leagueId, seasonId);
-                var dhLeagueRankings = dhLeagueRankingDao.GetListAllRankingByLeagueSeasonId(leagueId,seasonId);
+                var dhMatches = dhMatchDao.GetListStartedMatchesByLeagueSeasonId(leagueId, seasonId);
+                var dhLeagueRankings = dhLeagueRankingDao.GetListAllRankingByLeagueSeasonId(leagueId, seasonId);
+                var dhTeams = GetAllTeams();
 
-                var unFinishedMatches = dhMatches.Where(p => p.EndTime > DateTimeOffset.Now.ToUnixTimeMilliseconds()).ToList();
+                var unFinishedMatches = dhMatches.Where(p => p.EndTime > DateTimeOffset.Now.ToUnixTimeMilliseconds())
+                    .ToList();
                 unFinishedMatches.ForEach((match =>
                 {
                     var dhRankingHost = dhLeagueRankings.First(p => p.TeamId == match.TeamHostId);
@@ -103,22 +112,168 @@ namespace LeagueManagement.thaind.common
 
                     dhRankingHost = UpdateRankingEntityWithMatch(dhRankingHost, match);
                     dhRankingAway = UpdateRankingEntityWithMatch(dhRankingAway, match);
-                    
+
                     dhLeagueRankings.Add(dhRankingHost);
                     dhLeagueRankings.Add(dhRankingAway);
                 }));
 
-                dhLeagueRankings.Sort((first, second) => first.Point.CompareTo(second.Point));
-                dhLeagueRankings.Reverse();
+                dhLeagueRankings = dhLeagueRankings.OrderByDescending(p => p.Point).ThenBy(p => p.Difference)
+                    .ThenBy(p => p.NumWin)
+                    .ThenBy(p => p.TeamId).ToList();
 
-                var json = JsonConvert.SerializeObject(dhLeagueRankings);
-                result = JsonConvert.DeserializeObject<DataTable>(json);
+                result = new DataTable();
+
+                var header = ColumnDataTableRankingHeader();
+                foreach (var entry in header)
+                {
+                    result.Columns.Add(entry.Key, entry.Value);
+                }
+
+                var positionCount = -1;
+                dhLeagueRankings.ForEach(ranking =>
+                {
+                    object[] values = new object[result.Columns.Count];
+                    var dhTeam = dhTeams.First(p => p.Id == ranking.TeamId);
+                    values[0] = ++positionCount;
+                    values[1] = dhTeam != null ? dhTeam.Name : "";
+                    values[2] = ranking.Point;
+                    values[3] = ranking.NumWin;
+                    values[4] = ranking.NumDraw;
+                    values[5] = ranking.NumLost;
+                    values[6] = ranking.PlayedMatches;
+                    values[7] = ranking.NumGoalScored;
+                    values[8] = ranking.NumGoalReceived;
+                    values[9] = ranking.Difference;
+                    result.Rows.Add(values);
+                });
+                /*var json = JsonConvert.SerializeObject(dhLeagueRankings);
+                result = JsonConvert.DeserializeObject<DataTable>(json);*/
             }
             catch (Exception ex)
             {
                 Log.Error("Error get temporary ranking, trace: ", ex);
             }
 
+            return result;
+        }
+
+        public static DataTable GetDisplayRankingFromDhLeagueRanking(List<DhLeagueRanking> source, List<DhLeagueRanking> allRanking)
+        {
+            DataTable result = null;
+            try
+            {
+                var dhTeams = GetAllTeams();
+                var dhLeagueRankings = allRanking;
+
+                result = new DataTable();
+                
+                var header = ColumnDataTableRankingHeader();
+                foreach (var entry in header)
+                {
+                    result.Columns.Add(entry.Key, entry.Value);
+                }
+                
+                source.ForEach(ranking =>
+                {
+                    object[] values = new object[result.Columns.Count];
+                    var dhTeam = dhTeams.First(p => p.Id == ranking.TeamId);
+                    values[0] = dhLeagueRankings.IndexOf(ranking);
+                    values[1] = dhTeam != null ? dhTeam.Name : "";
+                    values[2] = ranking.Point;
+                    values[3] = ranking.NumWin;
+                    values[4] = ranking.NumDraw;
+                    values[5] = ranking.NumLost;
+                    values[6] = ranking.PlayedMatches;
+                    values[7] = ranking.NumGoalScored;
+                    values[8] = ranking.NumGoalReceived;
+                    values[9] = ranking.Difference;
+                    result.Rows.Add(values);
+                });
+                
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error get display datatable from ranking, ", ex);
+            }
+            return result;
+        }
+
+        private static Dictionary<string, Type> ColumnDataTableRankingHeader()
+        {
+            var result = new Dictionary<string, Type>();
+            result.Add("rowNum", typeof(int));
+            result.Add("name", typeof(string));
+            result.Add("point", typeof(int));
+            result.Add("num_win", typeof(int));
+            result.Add("num_draw", typeof(int));
+            result.Add("num_lost", typeof(int));
+            result.Add("played_matches", typeof(int));
+            result.Add("num_goal_scored", typeof(int));
+            result.Add("num_goal_received", typeof(int));
+            result.Add("difference", typeof(int));
+            return result;
+        }
+
+        public static DhLeague GetLeagueById(int id)
+        {
+            DhLeague result = null;
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                result = databaseContext.DhLeagues.First(p => p.Id == id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
+            }
+
+            return result;
+        }
+
+        public static DhSeason GetSeasonById(int id)
+        {
+            DhSeason result = null;
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                result = databaseContext.DhSeasons.First(p => p.Id == id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
+            }
+
+            return result;
+        }
+
+        public static DhNation GetNationById(int id)
+        {
+            DhNation result = null;
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                result = databaseContext.DhNations.First(p => p.Id == id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
+            }
+
+            return result;
+        }
+
+        public static List<DhTeam> GetAllTeams()
+        {
+            var result = new List<DhTeam>();
+            try
+            {
+                var databaseContext = DatabaseObject.GetDatabaseContext();
+                result = databaseContext.DhTeams.ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
+            }
             return result;
         }
     }

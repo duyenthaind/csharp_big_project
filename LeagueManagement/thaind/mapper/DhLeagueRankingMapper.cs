@@ -28,6 +28,8 @@ namespace LeagueManagement.thaind.mapper
                 result.NumLost = Convert.ToInt32(row["num_lost"]);
                 result.PlayedMatches = Convert.ToInt32(row["played_matches"]);
                 result.Difference = Convert.ToInt32(row["difference"]);
+                result.NumGoalScored = Convert.ToInt32(row["num_goal_scored"]);
+                result.NumGoalReceived = Convert.ToInt32(row["num_goal_received"]);
             }
             catch (Exception ex)
             {
@@ -50,6 +52,8 @@ namespace LeagueManagement.thaind.mapper
             result.Add("numLost", entity.NumLost);
             result.Add("playedMatches", entity.PlayedMatches);
             result.Add("difference", entity.Difference);
+            result.Add("numGoalScored",entity.NumGoalScored);
+            result.Add("numGoalReceived", entity.NumGoalReceived);
             return result;
         }
     }

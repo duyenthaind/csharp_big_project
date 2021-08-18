@@ -16,6 +16,7 @@ namespace LeagueManagement.thaind.entity
         private int teamAwayGoal;
         private long startTime;
         private long endTime;
+        private bool isFinalResult;
 
         public DhMatch()
         {
@@ -82,6 +83,13 @@ namespace LeagueManagement.thaind.entity
         {
             get => endTime;
             set => endTime = value;
+        }
+
+        [Column(Name = "is_final_result")]
+        public bool IsFinalResult
+        {
+            get => isFinalResult;
+            set => isFinalResult = value;
         }
     }
 }

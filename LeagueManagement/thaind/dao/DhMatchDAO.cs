@@ -52,6 +52,7 @@ namespace LeagueManagement.thaind.dao
                 toUpdate.TeamAwayGoal = entity.TeamAwayGoal;
                 toUpdate.StartTime = entity.StartTime;
                 toUpdate.EndTime = entity.EndTime;
+                toUpdate.IsFinalResult = entity.IsFinalResult;
                 databaseContext.SubmitChanges();
             }
             catch (Exception ex)
@@ -146,13 +147,14 @@ namespace LeagueManagement.thaind.dao
             return result;
         }
         
-        public List<DhMatch> GetListMatchesByLeagueSeasonId(int leagueId, int seasonId)
+        public List<DhMatch> GetListStartedMatchesByLeagueSeasonId(int leagueId, int seasonId)
         {
             var result = new List<DhMatch>();
             try
             {
                 var databaseContext = DatabaseObject.GetDatabaseContext();
-                var dhMatches = databaseContext.DhMatches.Where(p => (p.LeagueId == leagueId)&&(p.SeasonId == seasonId));
+                var dhMatches = databaseContext.DhMatches.Where(p => 
+                    (p.LeagueId == leagueId)&&(p.SeasonId == seasonId)&&(p.StartTime >= DateTimeOffset.Now.ToUnixTimeMilliseconds()));
                 result = dhMatches.ToList();
             }
             catch (Exception ex)
@@ -170,7 +172,7 @@ namespace LeagueManagement.thaind.dao
             {
                 var databaseContext = DatabaseObject.GetDatabaseContext();
                 var dhMatches = databaseContext.DhMatches.Where(p =>
-                    (p.LeagueId == leagueId) && (p.EndTime < DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    (p.LeagueId == leagueId) && (p.EndTime < DateTimeOffset.Now.ToUnixTimeMilliseconds() && p.IsFinalResult));
                 result = dhMatches.ToList();
             }
             catch (Exception ex)
@@ -188,7 +190,7 @@ namespace LeagueManagement.thaind.dao
             {
                 var databaseContext = DatabaseObject.GetDatabaseContext();
                 var queryDhMatches = databaseContext.DhMatches.Where(p =>
-                    (p.LeagueId == leagueId) && (p.SeasonId == seasonId) && (p.EndTime < DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    (p.LeagueId == leagueId) && (p.SeasonId == seasonId) && (p.EndTime < DateTimeOffset.Now.ToUnixTimeMilliseconds()) && p.IsFinalResult);
                 result = queryDhMatches.ToList();
             }
             catch (Exception ex)

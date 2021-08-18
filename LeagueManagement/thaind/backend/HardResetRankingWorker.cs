@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using LeagueManagement.thaind.common;
 using LeagueManagement.thaind.dao;
@@ -168,6 +169,13 @@ namespace LeagueManagement.thaind.backend
                         $"Resetting league ranking, host_team_id: {dbEntity.TeamHostId}, away_team_id: {dbEntity.TeamAwayId} ");
                     dhLeagueRankingDao.SaveOrUpdate(dhCurrentLeagueRankingHost);
                     dhLeagueRankingDao.SaveOrUpdate(dhCurrentLeagueRankingAway);
+                }
+
+                if (job.LblMessage != null)
+                {
+                    job.LblMessage.Text =
+                        "Thành công, vui lòng tìm kiếm lại để cập nhật kết quả";
+                    job.LblMessage.ForeColor = Color.Fuchsia;
                 }
             }
             catch (Exception ex)

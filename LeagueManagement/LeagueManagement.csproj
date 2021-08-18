@@ -100,6 +100,7 @@
         <Compile Include="thaind\common\Config.cs" />
         <Compile Include="thaind\common\DbUtil.cs" />
         <Compile Include="thaind\common\Start.cs" />
+        <Compile Include="thaind\common\Statistic.cs" />
         <Compile Include="thaind\dao\AbstractDAO.cs" />
         <Compile Include="thaind\dao\BaseDAO.cs" />
         <Compile Include="thaind\dao\ConnectionProvider.cs" />
@@ -107,8 +108,24 @@
         <Compile Include="thaind\dao\DataContextProvider.cs" />
         <Compile Include="thaind\dao\DhLeagueRankingDAO.cs" />
         <Compile Include="thaind\dao\DhMatchDAO.cs" />
+        <Compile Include="thaind\entity\DhLeague.cs" />
         <Compile Include="thaind\entity\DhLeagueRanking.cs" />
         <Compile Include="thaind\entity\DhMatch.cs" />
+        <Compile Include="thaind\entity\DhNation.cs" />
+        <Compile Include="thaind\entity\DhSeason.cs" />
+        <Compile Include="thaind\entity\DhTeam.cs" />
+        <Compile Include="thaind\frontend\LeagueRankingStatisticViewForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="thaind\frontend\LeagueRankingStatisticViewForm.Designer.cs">
+          <DependentUpon>LeagueRankingStatisticViewForm.cs</DependentUpon>
+        </Compile>
+        <Compile Include="thaind\frontend\LeagueRankingViewForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="thaind\frontend\LeagueRankingViewForm.Designer.cs">
+          <DependentUpon>LeagueRankingViewForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="thaind\mapper\AbstractRowMapper.cs" />
         <Compile Include="thaind\mapper\DhLeagueRankingMapper.cs" />
         <Compile Include="thaind\mapper\DhMatchMapper.cs" />
@@ -130,6 +147,12 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <EmbeddedResource Include="thaind\frontend\LeagueRankingStatisticViewForm.resx">
+          <DependentUpon>LeagueRankingStatisticViewForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="thaind\frontend\LeagueRankingViewForm.resx">
+          <DependentUpon>LeagueRankingViewForm.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="thaind\TestForm.resx">
           <DependentUpon>TestForm.cs</DependentUpon>
         </EmbeddedResource>
@@ -157,9 +180,6 @@
       <Content Include="config\log4net.xml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="thaind\frontend" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
