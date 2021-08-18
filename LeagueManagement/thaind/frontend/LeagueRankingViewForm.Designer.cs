@@ -173,7 +173,7 @@ namespace LeagueManagement.thaind.frontend
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(329, 23);
             this.lblMessage.TabIndex = 2;
-            this.lblMessage.Text = "label6";
+            this.lblMessage.Text = "message";
             // 
             // lblSeasonName
             // 

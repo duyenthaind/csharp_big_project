@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using LeagueManagement.thaind.common;
 using LeagueManagement.thaind.entity;
 using LeagueManagement.thaind.mapper;
 using log4net;
@@ -315,6 +316,42 @@ namespace LeagueManagement.thaind.dao
             catch (Exception ex)
             {
                 Log.Error("Error, trace: ", ex);
+            }
+
+            return result;
+        }
+
+        public DataTable GetDataTableMostWin(int leagueId, int seasonId)
+        {
+            DataTable result = null;
+            try
+            {
+                var listAllRankingByLeagueSeasonId = GetListAllRankingByLeagueSeasonId(leagueId, seasonId);
+                var mostWin = listAllRankingByLeagueSeasonId.Max(p => p.NumWin);
+                var listAllMostWin = listAllRankingByLeagueSeasonId.Where(p => p.NumWin == mostWin).ToList();
+                result = DbUtil.GetDisplayRankingFromDhLeagueRanking(listAllMostWin, listAllRankingByLeagueSeasonId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
+            }
+
+            return result;
+        }
+
+        public DataTable GetDataTableMostLost(int leagueId, int seasonId)
+        {
+            DataTable result = null;
+            try
+            {
+                var listAllRankingByLeagueSeasonId = GetListAllRankingByLeagueSeasonId(leagueId, seasonId);
+                var mostLost = listAllRankingByLeagueSeasonId.Max(p => p.NumLost);
+                var listAllMostLost = listAllRankingByLeagueSeasonId.Where(p => p.NumLost == mostLost).ToList();
+                result = DbUtil.GetDisplayRankingFromDhLeagueRanking(listAllMostLost, listAllRankingByLeagueSeasonId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
             }
 
             return result;

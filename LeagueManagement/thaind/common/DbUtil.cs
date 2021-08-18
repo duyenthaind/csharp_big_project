@@ -157,6 +157,47 @@ namespace LeagueManagement.thaind.common
             return result;
         }
 
+        public static DataTable GetDisplayRankingFromDhLeagueRanking(List<DhLeagueRanking> source, List<DhLeagueRanking> allRanking)
+        {
+            DataTable result = null;
+            try
+            {
+                var dhTeams = GetAllTeams();
+                var dhLeagueRankings = allRanking;
+
+                result = new DataTable();
+                
+                var header = ColumnDataTableRankingHeader();
+                foreach (var entry in header)
+                {
+                    result.Columns.Add(entry.Key, entry.Value);
+                }
+                
+                source.ForEach(ranking =>
+                {
+                    object[] values = new object[result.Columns.Count];
+                    var dhTeam = dhTeams.First(p => p.Id == ranking.TeamId);
+                    values[0] = dhLeagueRankings.IndexOf(ranking);
+                    values[1] = dhTeam != null ? dhTeam.Name : "";
+                    values[2] = ranking.Point;
+                    values[3] = ranking.NumWin;
+                    values[4] = ranking.NumDraw;
+                    values[5] = ranking.NumLost;
+                    values[6] = ranking.PlayedMatches;
+                    values[7] = ranking.NumGoalScored;
+                    values[8] = ranking.NumGoalReceived;
+                    values[9] = ranking.Difference;
+                    result.Rows.Add(values);
+                });
+                
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error get display datatable from ranking, ", ex);
+            }
+            return result;
+        }
+
         private static Dictionary<string, Type> ColumnDataTableRankingHeader()
         {
             var result = new Dictionary<string, Type>();

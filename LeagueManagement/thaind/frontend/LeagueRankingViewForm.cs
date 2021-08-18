@@ -1,6 +1,7 @@
 ﻿// @author duyenthai
 
 using System;
+using System.Data;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -58,7 +59,7 @@ namespace LeagueManagement.thaind.frontend
         private void btnReCalculate_Click(object sender, EventArgs e)
         {
             ResetRankingData();
-            
+
             try
             {
                 if (cbLeague.SelectedValue == null || cbSeason.SelectedValue == null)
@@ -73,7 +74,7 @@ namespace LeagueManagement.thaind.frontend
 
                 var workJob = new HardResetRankingJob(leagueId, seasonId);
                 workJob.LblMessage = lblMessage;
-                BaseWorker.PubJob(typeof(HardResetRankingWorker),-1, workJob);
+                BaseWorker.PubJob(typeof(HardResetRankingWorker), -1, workJob);
             }
             catch (Exception ex)
             {
@@ -81,7 +82,7 @@ namespace LeagueManagement.thaind.frontend
                 Log.Error("Reset all ranking error, trace: ", ex);
             }
         }
-        
+
         private void btnViewTemp_Click(object sender, EventArgs e)
         {
             ResetRankingData();
@@ -98,7 +99,7 @@ namespace LeagueManagement.thaind.frontend
                 var seasonId = Convert.ToInt32(cbSeason.SelectedValue);
 
                 lblMessage.Text = "Đây là thông tin về kết quả hiện tại về giải đấu";
-                
+
                 LoadLeagueData(leagueId, seasonId);
 
                 dgvRanking.DataSource = DbUtil.GetTemporaryRankingByLeagueSeasonId(leagueId, seasonId);
@@ -109,7 +110,7 @@ namespace LeagueManagement.thaind.frontend
                 Log.Error("View all temp ranking error, trace: ", ex);
             }
         }
-        
+
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             DoLoad();
@@ -142,7 +143,15 @@ namespace LeagueManagement.thaind.frontend
             lblSeasonName.Text = "";
             lblMessage.Text = "";
             lblMessage.ForeColor = Color.Black;
-            dgvRanking.DataSource = null;
+            try
+            {
+                ((DataTable) dgvRanking.DataSource)?.Rows.Clear();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error, ", ex);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void AutoReload()

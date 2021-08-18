@@ -86,7 +86,7 @@ namespace LeagueManagement.thaind.backend
                         return;
                     }
 
-                    var fileName = Config.EXPORT_FILE_DIR + "ExportFile_" + DateTime.Now.ToString("dddd-MM-yyyy") +
+                    var fileName = Config.EXPORT_FILE_DIR + "ExportFile_" + DateTime.Now.ToString("dd-MM-yyyy") +
                                    "_" + Guid.NewGuid() + ".xlsx";
                     using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
                     {
