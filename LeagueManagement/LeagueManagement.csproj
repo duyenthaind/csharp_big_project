@@ -33,6 +33,14 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+          <HintPath>..\packages\Portable.BouncyCastle.1.8.6\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.1.9, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
+          <HintPath>..\packages\SharpZipLib.1.3.1\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
           <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
           <Private>True</Private>
@@ -41,9 +49,26 @@
           <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="NPOI, Version=2.5.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1">
+          <HintPath>..\packages\NPOI.2.5.4\lib\net45\NPOI.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="NPOI.OOXML, Version=2.5.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1">
+          <HintPath>..\packages\NPOI.2.5.4\lib\net45\NPOI.OOXML.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="NPOI.OpenXml4Net, Version=2.5.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1">
+          <HintPath>..\packages\NPOI.2.5.4\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="NPOI.OpenXmlFormats, Version=2.5.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1">
+          <HintPath>..\packages\NPOI.2.5.4\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
+        <Reference Include="System.Data.Linq" />
         <Reference Include="System.Web" />
         <Reference Include="System.Xml.Linq" />
         <Reference Include="System.Data.DataSetExtensions" />
@@ -66,11 +91,44 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="thaind\backend\BaseJob.cs" />
         <Compile Include="thaind\backend\BaseWorker.cs" />
+        <Compile Include="thaind\backend\ExportAndSendEmailJob.cs" />
+        <Compile Include="thaind\backend\ExportAndSendEmailWorker.cs" />
+        <Compile Include="thaind\backend\HardResetRankingJob.cs" />
+        <Compile Include="thaind\backend\HardResetRankingWorker.cs" />
         <Compile Include="thaind\backend\UpdateRankingJob.cs" />
         <Compile Include="thaind\backend\UpdateRankingWorker.cs" />
         <Compile Include="thaind\common\Config.cs" />
+        <Compile Include="thaind\common\DbUtil.cs" />
+        <Compile Include="thaind\common\Start.cs" />
+        <Compile Include="thaind\common\Statistic.cs" />
         <Compile Include="thaind\dao\AbstractDAO.cs" />
+        <Compile Include="thaind\dao\BaseDAO.cs" />
         <Compile Include="thaind\dao\ConnectionProvider.cs" />
+        <Compile Include="thaind\dao\DatabaseObject.cs" />
+        <Compile Include="thaind\dao\DataContextProvider.cs" />
+        <Compile Include="thaind\dao\DhLeagueRankingDAO.cs" />
+        <Compile Include="thaind\dao\DhMatchDAO.cs" />
+        <Compile Include="thaind\entity\DhLeague.cs" />
+        <Compile Include="thaind\entity\DhLeagueRanking.cs" />
+        <Compile Include="thaind\entity\DhMatch.cs" />
+        <Compile Include="thaind\entity\DhNation.cs" />
+        <Compile Include="thaind\entity\DhSeason.cs" />
+        <Compile Include="thaind\entity\DhTeam.cs" />
+        <Compile Include="thaind\frontend\LeagueRankingStatisticViewForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="thaind\frontend\LeagueRankingStatisticViewForm.Designer.cs">
+          <DependentUpon>LeagueRankingStatisticViewForm.cs</DependentUpon>
+        </Compile>
+        <Compile Include="thaind\frontend\LeagueRankingViewForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="thaind\frontend\LeagueRankingViewForm.Designer.cs">
+          <DependentUpon>LeagueRankingViewForm.cs</DependentUpon>
+        </Compile>
+        <Compile Include="thaind\mapper\AbstractRowMapper.cs" />
+        <Compile Include="thaind\mapper\DhLeagueRankingMapper.cs" />
+        <Compile Include="thaind\mapper\DhMatchMapper.cs" />
         <Compile Include="thaind\TestForm.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -89,6 +147,12 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <EmbeddedResource Include="thaind\frontend\LeagueRankingStatisticViewForm.resx">
+          <DependentUpon>LeagueRankingStatisticViewForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="thaind\frontend\LeagueRankingViewForm.resx">
+          <DependentUpon>LeagueRankingViewForm.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="thaind\TestForm.resx">
           <DependentUpon>TestForm.cs</DependentUpon>
         </EmbeddedResource>
@@ -116,9 +180,6 @@
       <Content Include="config\log4net.xml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="thaind\frontend" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
