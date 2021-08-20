@@ -87,6 +87,16 @@
         <Compile Include="MainForm.Designer.cs">
             <DependentUpon>MainForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="phuctx\Connection.cs" />
+        <Compile Include="phuctx\DataAtheletes.cs" />
+        <Compile Include="phuctx\DataLeague.cs" />
+        <Compile Include="phuctx\DataTeam.cs" />
+        <Compile Include="phuctx\FormAtheletes.cs" />
+        <Compile Include="phuctx\FormAtheletes.Designer.cs" />
+        <Compile Include="phuctx\FormLeague.cs" />
+        <Compile Include="phuctx\FormLeague.Designer.cs" />
+        <Compile Include="phuctx\FormTeam.cs" />
+        <Compile Include="phuctx\FormTeam.Designer.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="thaind\backend\BaseJob.cs" />
@@ -138,6 +148,9 @@
         <EmbeddedResource Include="MainForm.resx">
           <DependentUpon>MainForm.cs</DependentUpon>
         </EmbeddedResource>
+        <EmbeddedResource Include="phuctx\FormAtheletes.resx" />
+        <EmbeddedResource Include="phuctx\FormLeague.resx" />
+        <EmbeddedResource Include="phuctx\FormTeam.resx" />
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
