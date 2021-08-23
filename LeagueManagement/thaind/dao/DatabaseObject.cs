@@ -27,6 +27,7 @@ namespace LeagueManagement.thaind.dao
         public Table<DhNation> DhNations;
         public Table<DhSeason> DhSeasons;
         public Table<DhTeam> DhTeams;
+        public Table<DhSmtpMail> DhSmtpMails;
 
         public static void Test()
         {

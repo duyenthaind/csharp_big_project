@@ -2,6 +2,7 @@
 
 using System;
 using System.Data;
+using System.Net.Mail;
 using System.Windows.Forms;
 using LeagueManagement.thaind.backend;
 using LeagueManagement.thaind.common;
@@ -141,12 +142,62 @@ namespace LeagueManagement.thaind.frontend
                 var seasonId = Convert.ToInt32(cbSeason.SelectedValue);
 
                 var exportJob = new ExportAndSendEmailJob(leagueId, seasonId);
+
+                string emailTo = EnterEmail();
+
+                if (!string.IsNullOrEmpty(emailTo) && IsEmail(emailTo))
+                {
+                    exportJob.Email = emailTo;
+                }
+                else
+                {
+                    MessageBox.Show("Không có email phù hợp, bạn sẽ không nhận được mail báo cáo từ chúng tôi",
+                        "Information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
                 BaseWorker.PubJob(typeof(ExportAndSendEmailWorker), -1, exportJob);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Log.Error("View error, trace: ", ex);
+            }
+        }
+
+        private string EnterEmail()
+        {
+            var prompt = new Form()
+            {
+                Width = 500,
+                Height = 150,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = "Nhập mail nếu bạn muốn nhận báo cáo qua email",
+                StartPosition = FormStartPosition.CenterScreen
+            };
+            var textLabel = new Label() {Left = 50, Top = 20, Text = "Gửi cho tôi"};
+            var textBox = new TextBox() {Left = 50, Top = 50, Width = 400};
+            var confirmation = new Button()
+                {Text = "Ok", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK};
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.AcceptButton = confirmation;
+
+            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+        }
+
+        public bool IsEmail(string emailAddress)
+        {
+            try
+            {
+                var mail = new MailAddress(emailAddress);
+
+                return true;
+            }
+            catch (FormatException ex)
+            {
+                return false;
             }
         }
     }

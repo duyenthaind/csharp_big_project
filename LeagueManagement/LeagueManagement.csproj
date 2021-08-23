@@ -105,6 +105,7 @@
         <Compile Include="thaind\backend\ExportAndSendEmailWorker.cs" />
         <Compile Include="thaind\backend\HardResetRankingJob.cs" />
         <Compile Include="thaind\backend\HardResetRankingWorker.cs" />
+        <Compile Include="thaind\backend\MailWorker.cs" />
         <Compile Include="thaind\backend\UpdateRankingJob.cs" />
         <Compile Include="thaind\backend\UpdateRankingWorker.cs" />
         <Compile Include="thaind\common\Config.cs" />
@@ -123,6 +124,7 @@
         <Compile Include="thaind\entity\DhMatch.cs" />
         <Compile Include="thaind\entity\DhNation.cs" />
         <Compile Include="thaind\entity\DhSeason.cs" />
+        <Compile Include="thaind\entity\DhSmtpMail.cs" />
         <Compile Include="thaind\entity\DhTeam.cs" />
         <Compile Include="thaind\frontend\LeagueRankingStatisticViewForm.cs">
           <SubType>Form</SubType>

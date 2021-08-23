@@ -82,8 +82,11 @@ namespace LeagueManagement.thaind.dao
             {
                 var databaseContext = DatabaseObject.GetDatabaseContext();
                 var dhMatches = databaseContext.DhMatches;
-                var toDelete = dhMatches.First(p => p.Id == entity.Id);
-                dhMatches.DeleteOnSubmit(toDelete);
+                var toDelete = dhMatches.FirstOrDefault(p => p.Id == entity.Id);
+                if (toDelete != null)
+                {
+                    dhMatches.DeleteOnSubmit(toDelete);
+                }
             }
             catch (Exception ex)
             {

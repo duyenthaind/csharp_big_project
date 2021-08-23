@@ -104,17 +104,20 @@ namespace LeagueManagement.thaind.common
                     .ToList();
                 unFinishedMatches.ForEach((match =>
                 {
-                    var dhRankingHost = dhLeagueRankings.First(p => p.TeamId == match.TeamHostId);
-                    var dhRankingAway = dhLeagueRankings.First(p => p.TeamId == match.TeamAwayId);
+                    var dhRankingHost = dhLeagueRankings.FirstOrDefault(p => p.TeamId == match.TeamHostId);
+                    var dhRankingAway = dhLeagueRankings.FirstOrDefault(p => p.TeamId == match.TeamAwayId);
 
-                    dhLeagueRankings.Remove(dhRankingHost);
-                    dhLeagueRankings.Remove(dhRankingAway);
+                    if (!(dhRankingHost == null || dhRankingAway == null))
+                    {
+                        dhLeagueRankings.Remove(dhRankingHost);
+                        dhLeagueRankings.Remove(dhRankingAway);
 
-                    dhRankingHost = UpdateRankingEntityWithMatch(dhRankingHost, match);
-                    dhRankingAway = UpdateRankingEntityWithMatch(dhRankingAway, match);
+                        dhRankingHost = UpdateRankingEntityWithMatch(dhRankingHost, match);
+                        dhRankingAway = UpdateRankingEntityWithMatch(dhRankingAway, match);
 
-                    dhLeagueRankings.Add(dhRankingHost);
-                    dhLeagueRankings.Add(dhRankingAway);
+                        dhLeagueRankings.Add(dhRankingHost);
+                        dhLeagueRankings.Add(dhRankingAway);
+                    }
                 }));
 
                 dhLeagueRankings = dhLeagueRankings.OrderByDescending(p => p.Point).ThenBy(p => p.Difference)
@@ -133,7 +136,7 @@ namespace LeagueManagement.thaind.common
                 dhLeagueRankings.ForEach(ranking =>
                 {
                     object[] values = new object[result.Columns.Count];
-                    var dhTeam = dhTeams.First(p => p.Id == ranking.TeamId);
+                    var dhTeam = dhTeams.FirstOrDefault(p => p.Id == ranking.TeamId);
                     values[0] = ++positionCount;
                     values[1] = dhTeam != null ? dhTeam.Name : "";
                     values[2] = ranking.Point;
@@ -157,7 +160,8 @@ namespace LeagueManagement.thaind.common
             return result;
         }
 
-        public static DataTable GetDisplayRankingFromDhLeagueRanking(List<DhLeagueRanking> source, List<DhLeagueRanking> allRanking)
+        public static DataTable GetDisplayRankingFromDhLeagueRanking(List<DhLeagueRanking> source,
+            List<DhLeagueRanking> allRanking)
         {
             DataTable result = null;
             try
@@ -166,17 +170,17 @@ namespace LeagueManagement.thaind.common
                 var dhLeagueRankings = allRanking;
 
                 result = new DataTable();
-                
+
                 var header = ColumnDataTableRankingHeader();
                 foreach (var entry in header)
                 {
                     result.Columns.Add(entry.Key, entry.Value);
                 }
-                
+
                 source.ForEach(ranking =>
                 {
                     object[] values = new object[result.Columns.Count];
-                    var dhTeam = dhTeams.First(p => p.Id == ranking.TeamId);
+                    var dhTeam = dhTeams.FirstOrDefault(p => p.Id == ranking.TeamId);
                     values[0] = dhLeagueRankings.IndexOf(ranking);
                     values[1] = dhTeam != null ? dhTeam.Name : "";
                     values[2] = ranking.Point;
@@ -189,12 +193,12 @@ namespace LeagueManagement.thaind.common
                     values[9] = ranking.Difference;
                     result.Rows.Add(values);
                 });
-                
             }
             catch (Exception ex)
             {
                 Log.Error("Error get display datatable from ranking, ", ex);
             }
+
             return result;
         }
 
@@ -220,7 +224,7 @@ namespace LeagueManagement.thaind.common
             try
             {
                 var databaseContext = DatabaseObject.GetDatabaseContext();
-                result = databaseContext.DhLeagues.First(p => p.Id == id);
+                result = databaseContext.DhLeagues.FirstOrDefault(p => p.Id == id);
             }
             catch (Exception ex)
             {
@@ -236,7 +240,7 @@ namespace LeagueManagement.thaind.common
             try
             {
                 var databaseContext = DatabaseObject.GetDatabaseContext();
-                result = databaseContext.DhSeasons.First(p => p.Id == id);
+                result = databaseContext.DhSeasons.FirstOrDefault(p => p.Id == id);
             }
             catch (Exception ex)
             {
@@ -252,7 +256,7 @@ namespace LeagueManagement.thaind.common
             try
             {
                 var databaseContext = DatabaseObject.GetDatabaseContext();
-                result = databaseContext.DhNations.First(p => p.Id == id);
+                result = databaseContext.DhNations.FirstOrDefault(p => p.Id == id);
             }
             catch (Exception ex)
             {
@@ -274,6 +278,7 @@ namespace LeagueManagement.thaind.common
             {
                 Log.Error("Error, ", ex);
             }
+
             return result;
         }
     }
