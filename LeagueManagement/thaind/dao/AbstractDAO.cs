@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows.Forms;
 using log4net;
 
@@ -12,8 +13,8 @@ namespace LeagueManagement.thaind.dao
     public class AbstractDAO
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(AbstractDAO));
-        
-        public void ExecuteNonQuery(string query, Dictionary<string, object> parameters)
+
+        public static void ExecuteNonQuery(string query, Dictionary<string, object> parameters)
         {
             using (var connection = ConnectionProvider.GetConnection())
             {
@@ -21,12 +22,16 @@ namespace LeagueManagement.thaind.dao
                 {
                     connection.Open();
                 }
+
                 try
                 {
                     var sqlCommand = new SqlCommand(query, connection);
-                    foreach (var entry in parameters)
+                    if (parameters != null && parameters.Any())
                     {
-                        sqlCommand.Parameters.AddWithValue("@" + entry.Key, entry.Value);
+                        foreach (var entry in parameters)
+                        {
+                            sqlCommand.Parameters.AddWithValue("@" + entry.Key, entry.Value);
+                        }
                     }
 
                     sqlCommand.ExecuteNonQuery();
@@ -39,7 +44,7 @@ namespace LeagueManagement.thaind.dao
             }
         }
 
-        public object ExecuteScalar(string query, Dictionary<string, object> parameters)
+        public static object ExecuteScalar(string query, Dictionary<string, object> parameters)
         {
             object result = null;
             using (var connection = ConnectionProvider.GetConnection())
@@ -48,13 +53,17 @@ namespace LeagueManagement.thaind.dao
                 {
                     connection.Open();
                 }
+
                 try
                 {
                     //insert into <table_name> output INSERTED.id values <values_here>
                     var sqlCommand = new SqlCommand(query, connection);
-                    foreach (var entry in parameters)
+                    if (parameters != null && parameters.Any())
                     {
-                        sqlCommand.Parameters.AddWithValue("@" + entry.Key, entry.Value);
+                        foreach (var entry in parameters)
+                        {
+                            sqlCommand.Parameters.AddWithValue("@" + entry.Key, entry.Value);
+                        }
                     }
 
                     result = sqlCommand.ExecuteScalar();
@@ -69,7 +78,7 @@ namespace LeagueManagement.thaind.dao
             return result;
         }
 
-        public DataTable FetchData(string query, Dictionary<string, object> parameters)
+        public static DataTable FetchData(string query, Dictionary<string, object> parameters)
         {
             DataTable result = null;
             using (var connection = ConnectionProvider.GetConnection())
@@ -78,12 +87,16 @@ namespace LeagueManagement.thaind.dao
                 {
                     connection.Open();
                 }
+
                 try
                 {
                     var sqlCommand = new SqlCommand(query, connection);
-                    foreach (var entry in parameters)
+                    if (parameters != null && parameters.Any())
                     {
-                        sqlCommand.Parameters.AddWithValue("@" + entry.Key, entry.Value);
+                        foreach (var entry in parameters)
+                        {
+                            sqlCommand.Parameters.AddWithValue("@" + entry.Key, entry.Value);
+                        }
                     }
 
                     var sqlReader = sqlCommand.ExecuteReader();

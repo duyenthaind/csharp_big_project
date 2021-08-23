@@ -5,9 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LeagueManagement.thaind.common;
-using LeagueManagement.thaind.dao;
 using log4net;
-using log4net.Config;
 
 namespace LeagueManagement
 {
@@ -20,9 +18,7 @@ namespace LeagueManagement
         [STAThread]
         static void Main()
         {
-            XmlConfigurator.Configure(new FileInfo(Directory.GetCurrentDirectory() + @"\config\log4net.xml"));
-            ConnectionProvider.LoadConfig(Directory.GetCurrentDirectory() + @"\config\connection_configuration.json");
-            Config.LoadConfig();
+            Start.Init();
             Log.Info("run ok");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

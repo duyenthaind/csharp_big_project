@@ -1,3 +1,4 @@
 {
-  "ranking_worker_interval": 60
+  "ranking_worker_interval": 60,
+  "export_file_dir": "./exportFile/"
 }
