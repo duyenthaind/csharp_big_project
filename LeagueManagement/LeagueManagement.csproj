@@ -87,6 +87,36 @@
         <Compile Include="MainForm.Designer.cs">
             <DependentUpon>MainForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="sonnx\BangXepHang.cs">
+        <SubType>Form</SubType>
+          </Compile>
+        <Compile Include="sonnx\BangXepHang.Designer.cs">
+          <DependentUpon>BangXepHang.cs</DependentUpon>
+        </Compile>
+        <Compile Include="sonnx\CapNhatTiSo.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="sonnx\CapNhatTiSo.Designer.cs">
+          <DependentUpon>CapNhatTiSo.cs</DependentUpon>
+        </Compile>
+        <Compile Include="sonnx\DangNhap.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="sonnx\DangNhap.Designer.cs">
+          <DependentUpon>DangNhap.cs</DependentUpon>
+        </Compile>
+        <Compile Include="sonnx\DAO_BangXepHang.cs" />
+        <Compile Include="sonnx\DAO_CapNhatTiSo.cs" />
+        <Compile Include="sonnx\DAO_DangNhap.cs" />
+        <Compile Include="sonnx\DAO_XepLich.cs" />
+        <Compile Include="sonnx\DBConnection_sonnx.cs" />
+        <Compile Include="sonnx\XepLich.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="sonnx\XepLich.designer.cs">
+          <DependentUpon>XepLich.cs</DependentUpon>
+        </Compile>
         <Compile Include="phuctx\Connection.cs" />
         <Compile Include="phuctx\DataAtheletes.cs" />
         <Compile Include="phuctx\DataLeague.cs" />
@@ -170,6 +200,18 @@
         </EmbeddedResource>
         <EmbeddedResource Include="thaind\TestForm.resx">
           <DependentUpon>TestForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="sonnx\BangXepHang.resx">
+          <DependentUpon>BangXepHang.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="sonnx\CapNhatTiSo.resx">
+          <DependentUpon>CapNhatTiSo.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="sonnx\DangNhap.resx">
+          <DependentUpon>DangNhap.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="sonnx\XepLich.resx">
+          <DependentUpon>XepLich.cs</DependentUpon>
         </EmbeddedResource>
         <None Include="packages.config" />
         <None Include="Properties\Settings.settings">
