@@ -71,7 +71,7 @@ namespace LeagueManagement.thaind.backend
                 mail.Body = "Export excel file";
                 mail.Subject = "League statistic";
                 smtpClient.Send(mail);
-                MessageBox.Show("Sent mail success, please check your mail", "Information", MessageBoxButtons.OK,
+                MessageBox.Show($"Sent mail success to {email}, please check your mail for more information", "Information", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
             catch (Exception ex)
