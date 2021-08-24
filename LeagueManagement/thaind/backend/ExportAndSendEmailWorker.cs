@@ -86,6 +86,8 @@ namespace LeagueManagement.thaind.backend
 
                     if (dhLeague == null || dhNation == null || dhSeason == null)
                     {
+                        MessageBox.Show("Please check your data, data lost spotted", "Warning", MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -175,8 +177,8 @@ namespace LeagueManagement.thaind.backend
 
                         //team statistic
                         const int endColumnHeaderTeamStat = 3;
-                        var mostWin = 0;
-                        var mostLost = 0;
+                        var mostWin = -1;
+                        var mostLost = -1;
                         if (listAllRankingByLeagueSeasonId.Any())
                         {
                             mostWin = listAllRankingByLeagueSeasonId.Max(p => p.NumWin);
@@ -342,29 +344,5 @@ namespace LeagueManagement.thaind.backend
             return localRow;
         }
 
-        private void SendMail(string email, FileStream fileStream, string fileName)
-        {
-            try
-            {
-                var smtpClient = new SmtpClient();
-                smtpClient.Host = "smtp.gmail.com";
-                smtpClient.Port = 587;
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = new NetworkCredential("thaindtest@gmail.com", ">3waifu@@@@@3333");
-                smtpClient.EnableSsl = true;
-
-                var mail = new MailMessage();
-                mail.From = new MailAddress("noreply@xmail.com");
-                mail.To.Add(email);
-                mail.Attachments.Add(new Attachment(fileStream, fileName, "text/excel"));
-                mail.Body = "Export excel file";
-                smtpClient.Send(mail);
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Error send mail, ", ex);
-                MessageBox.Show(ex.Message, "Error send mail", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }
