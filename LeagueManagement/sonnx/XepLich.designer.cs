@@ -31,7 +31,6 @@ namespace LeagueManagement.sonnx
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panelMuaGiai = new System.Windows.Forms.Panel();
             this.btnLoad = new System.Windows.Forms.Button();
@@ -62,12 +61,11 @@ namespace LeagueManagement.sonnx
             this.startTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.endTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panelMuaGiai.SuspendLayout();
             this.panelDoiBong.SuspendLayout();
             this.panelBTN.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvXepLich)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dgvXepLich)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -90,22 +88,11 @@ namespace LeagueManagement.sonnx
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(794, 48);
             this.panel1.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(304, 6);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(196, 24);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "XẾP LỊCH GIẢI ĐẤU";
             // 
             // tableLayoutPanel2
             // 
@@ -323,14 +310,7 @@ namespace LeagueManagement.sonnx
             // dgvXepLich
             // 
             this.dgvXepLich.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvXepLich.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.STT,
-            this.TenGiai,
-            this.MuaGiai,
-            this.host_name,
-            this.away_name,
-            this.startTime,
-            this.endTime});
+            this.dgvXepLich.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {this.STT, this.TenGiai, this.MuaGiai, this.host_name, this.away_name, this.startTime, this.endTime});
             this.dgvXepLich.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvXepLich.Location = new System.Drawing.Point(3, 357);
             this.dgvXepLich.Name = "dgvXepLich";
@@ -396,24 +376,20 @@ namespace LeagueManagement.sonnx
             this.Text = "XepLich";
             this.Load += new System.EventHandler(this.XepLich_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.panelMuaGiai.ResumeLayout(false);
             this.panelMuaGiai.PerformLayout();
             this.panelDoiBong.ResumeLayout(false);
             this.panelDoiBong.PerformLayout();
             this.panelBTN.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvXepLich)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dgvXepLich)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Panel panelMuaGiai;
         private System.Windows.Forms.Button btnLoad;

@@ -38,7 +38,7 @@ namespace LeagueManagement.sonnx
         private void btnCapNhat_Click(object sender, EventArgs e)
         {
             int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-            int season_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+            int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
             int index = dgv_TranDau.SelectedCells[0].RowIndex;
             String check = dgv_TranDau.Rows[index].Cells[7].Value.ToString();
             

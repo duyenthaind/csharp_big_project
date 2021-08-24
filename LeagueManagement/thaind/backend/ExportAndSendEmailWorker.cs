@@ -174,9 +174,14 @@ namespace LeagueManagement.thaind.backend
                         ++rowIndex;
 
                         //team statistic
-                        var endColumnHeaderTeamStat = 3;
-                        var mostWin = listAllRankingByLeagueSeasonId.Max(p => p.NumWin);
-                        var mostLost = listAllRankingByLeagueSeasonId.Max(p => p.NumLost);
+                        const int endColumnHeaderTeamStat = 3;
+                        var mostWin = 0;
+                        var mostLost = 0;
+                        if (listAllRankingByLeagueSeasonId.Any())
+                        {
+                            mostWin = listAllRankingByLeagueSeasonId.Max(p => p.NumWin);
+                            mostLost = listAllRankingByLeagueSeasonId.Max(p => p.NumLost);
+                        }
                         var dhTeamMostWin = listAllRankingByLeagueSeasonId.Where(p => p.NumWin == mostWin).ToList();
                         var dhTeamMostLost = listAllRankingByLeagueSeasonId.Where(p => p.NumLost == mostLost).ToList();
 
@@ -254,26 +259,29 @@ namespace LeagueManagement.thaind.backend
 
                         workbook.Write(fileStream);
 
-                        try
+                        if (!string.IsNullOrEmpty(workJob.Email))
                         {
-                            var dhActiveSmtpMail =
-                                databaseContext.DhSmtpMails.FirstOrDefault(p => p.Active && (p.Host != null));
-                            if (dhActiveSmtpMail == null)
+                            try
                             {
-                                MessageBox.Show("No mail configured for system, cannot send mail", "Warning",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                var dhActiveSmtpMail =
+                                    databaseContext.DhSmtpMails.FirstOrDefault(p => p.Active && (p.Host != null));
+                                if (dhActiveSmtpMail == null)
+                                {
+                                    MessageBox.Show("No mail configured for system, cannot send mail", "Warning",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                                else
+                                {
+                                    var mailWorker = new MailWorker("MailWorker", workJob.Email, @fileStream.Name);
+                                    mailWorker.Credential = dhActiveSmtpMail;
+                                    mailWorker.Start();
+                                }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                var mailWorker = new MailWorker("MailWorker", workJob.Email, @fileStream.Name);
-                                mailWorker.Credential = dhActiveSmtpMail;
-                                mailWorker.Start();
+                                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                Log.Error("Error, ", ex);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            Log.Error("Error, ", ex);
                         }
 
                         var options = MessageBox.Show(

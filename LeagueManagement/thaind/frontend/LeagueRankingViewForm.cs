@@ -47,7 +47,9 @@ namespace LeagueManagement.thaind.frontend
 
                 LoadRankingData(leagueId, seasonId);
 
-                AutoReload();
+                lblMessage.Text = "Kết quả dưới đây vẫn đang được cập nhật, reload để xem thông tin mới";
+                lblMessage.ForeColor = Color.Red;
+                // AutoReload();
             }
             catch (Exception ex)
             {
@@ -157,11 +159,11 @@ namespace LeagueManagement.thaind.frontend
         private void AutoReload()
         {
             _runningAutoLoad = true;
-            lblMessage.Text = "Kết quả giải đấu sẽ được chúng tôi cập nhật mỗi 1 phút";
+            lblMessage.Text = "Kết quả giải đấu sẽ được chúng tôi cập nhật mỗi 30 giây";
             lblMessage.ForeColor = Color.Red;
             try
             {
-                Thread thread = new Thread(new ThreadStart(this.SleepThenLoad));
+                var thread = new Thread(new ThreadStart(this.SleepThenLoad));
                 thread.Start();
             }
             catch (Exception ex)
@@ -196,14 +198,21 @@ namespace LeagueManagement.thaind.frontend
         {
             while (_runningAutoLoad)
             {
-                Thread.Sleep(TimeSpan.FromSeconds(60));
+                Thread.Sleep(TimeSpan.FromSeconds(30));
                 LoadRankingData(_currentLeagueId, _currentSeasonId);
+                Log.Info("Reload result at : " + DateTime.UtcNow);
             }
+            Log.Info("Stopped loop autoload!!!");
         }
 
         private void LeagueRankingViewForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             _runningAutoLoad = false;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

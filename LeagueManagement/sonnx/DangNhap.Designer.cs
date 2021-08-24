@@ -41,7 +41,7 @@ namespace LeagueManagement.sonnx
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label1.Location = new System.Drawing.Point(149, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(97, 20);
@@ -116,9 +116,9 @@ namespace LeagueManagement.sonnx
             this.Name = "DangNhap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DangNhap";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DangNhap_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

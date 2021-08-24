@@ -97,6 +97,7 @@ namespace LeagueManagement.thaind.backend
                     entry.Value.ForEach(index => index.Stop());
                     Log.Info($"Stop all workers in group {entry.Key}");
                 }
+                Log.Info($"Stopped all worker at {DateTime.UtcNow}");
             }
             catch (Exception ex)
             {

@@ -29,7 +29,7 @@ namespace LeagueManagement.sonnx
             try
             {
                 int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-                int season_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+                int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
                 dao.ShowData(dgvXepLich, league_id, season_id);
                 dao.ShowDoiBong(league_id, cbbDoiChuNha, cbbDoiKhach);
             }
