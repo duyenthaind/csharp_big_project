@@ -13,7 +13,7 @@ namespace LeagueManagement.thaind.frontend
 {
     public partial class LeagueRankingStatisticViewForm : Form
     {
-        private static ILog Log = LogManager.GetLogger(typeof(LeagueRankingViewForm));
+        private static ILog Log = LogManager.GetLogger(typeof(LeagueRankingStatisticViewForm));
 
         public LeagueRankingStatisticViewForm()
         {
@@ -115,7 +115,6 @@ namespace LeagueManagement.thaind.frontend
             lblGoals.Text = stat.AllGoals.ToString();
             var formattedValue = $"{stat.GoalPerMatches:F2}";
             lblGoalPermatches.Text = formattedValue;
-            Log.Info(stat.GoalPerMatches);
         }
 
         private void LoadRankingData(Statistic stat)

@@ -276,7 +276,6 @@ namespace LeagueManagement.thaind.dao
                 parameters.Add("leagueId", leagueId);
                 parameters.Add("seasonId", seasonId);
                 result = AbstractDAO.FetchData(QueryAllByLeagueSeason, parameters);
-
             }
             catch (Exception ex)
             {
@@ -327,7 +326,12 @@ namespace LeagueManagement.thaind.dao
             try
             {
                 var listAllRankingByLeagueSeasonId = GetListAllRankingByLeagueSeasonId(leagueId, seasonId);
-                var mostWin = listAllRankingByLeagueSeasonId.Max(p => p.NumWin);
+                var mostWin = -1;
+                if (listAllRankingByLeagueSeasonId.Any())
+                {
+                    mostWin = listAllRankingByLeagueSeasonId.Max(p => p.NumWin);
+                }
+
                 var listAllMostWin = listAllRankingByLeagueSeasonId.Where(p => p.NumWin == mostWin).ToList();
                 result = DbUtil.GetDisplayRankingFromDhLeagueRanking(listAllMostWin, listAllRankingByLeagueSeasonId);
             }
@@ -345,7 +349,12 @@ namespace LeagueManagement.thaind.dao
             try
             {
                 var listAllRankingByLeagueSeasonId = GetListAllRankingByLeagueSeasonId(leagueId, seasonId);
-                var mostLost = listAllRankingByLeagueSeasonId.Max(p => p.NumLost);
+                var mostLost = -1;
+                if (listAllRankingByLeagueSeasonId.Any())
+                {
+                    mostLost = listAllRankingByLeagueSeasonId.Max(p => p.NumLost);
+                }
+
                 var listAllMostLost = listAllRankingByLeagueSeasonId.Where(p => p.NumLost == mostLost).ToList();
                 result = DbUtil.GetDisplayRankingFromDhLeagueRanking(listAllMostLost, listAllRankingByLeagueSeasonId);
             }

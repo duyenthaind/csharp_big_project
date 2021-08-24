@@ -13,6 +13,7 @@ namespace LeagueManagement
     static class Program
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -23,7 +24,7 @@ namespace LeagueManagement
             Log.Info("run ok");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CapNhatTiSo());
+            Application.Run(new DangNhap());
         }
     }
 }
