@@ -22,8 +22,8 @@ namespace LeagueManagement.sonnx
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
-                    String sqlTenGiai = "select dh_league.id, name from dh_league";
-                    String sqlMuaGiai = "select dh_season.id, name from dh_season";
+                    String sqlTenGiai = "SELECT dh_league.id, name FROM dh_league";
+                    String sqlMuaGiai = "SELECT dh_season.id, name FROM dh_season";
 
                     //ComboboxTenGiai
                     cbbTenGiai.DataSource = dataConn.GetTable(sqlTenGiai);

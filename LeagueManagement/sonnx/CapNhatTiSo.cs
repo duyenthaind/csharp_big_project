@@ -21,7 +21,7 @@ namespace LeagueManagement.sonnx
         private void btnLoad_Click(object sender, EventArgs e)
         {
             int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-            int season_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+            int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
             dao.ShowData(dgv_TranDau, league_id, season_id);
         }
 
