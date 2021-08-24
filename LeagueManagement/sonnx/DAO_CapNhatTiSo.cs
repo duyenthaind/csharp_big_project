@@ -22,8 +22,8 @@ namespace LeagueManagement.sonnx
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
-                    String sqlTenGiai = "select dh_league.id, name from dh_league";
-                    String sqlMuaGiai = "select dh_season.id, name from dh_season";
+                    String sqlTenGiai = "SELECT dh_league.id, name FROM dh_league";
+                    String sqlMuaGiai = "SELECT dh_season.id, name FROM dh_season";
 
                     //ComboboxTenGiai
                     cbbTenGiai.DataSource = dataConn.GetTable(sqlTenGiai);
@@ -52,12 +52,12 @@ namespace LeagueManagement.sonnx
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
-                    String sqlXepLich = "SELECT t1.name as host_name, t2.name as away_name, m.team_host_goal as Host_goal, m.team_away_goal as Away_goal, " +
-                                        " dateadd(SECOND, CONVERT(bigint, m.start_time / 1000), '1970-01-01') AT TIME ZONE 'UTC' as startTime," +
-                                        " dateadd(SECOND, CONVERT(bigint, m.end_time / 1000), '1970-01-01') AT TIME ZONE 'UTC' as endTime, is_final_result " +
-                                        " FROM dh_match m join dh_team t1 on m.team_host_id = t1.id join dh_team t2 on m.team_away_id = t2.id" +
-                                        " join dh_league l on m.league_id = l.id join dh_season s on m.season_id = s.id" +
-                                        " WHERE m.league_id = @league_id and m.season_id = @season_id";
+                    String sqlXepLich = "SELECT m.id as STT, t1.name AS host_name, t2.name AS away_name, m.team_host_goal AS Host_goal, m.team_away_goal AS Away_goal, " +
+                                        " dateadd(SECOND, CONVERT(bigint, m.start_time / 1000), '1970-01-01') AT TIME ZONE 'UTC' AS startTime," +
+                                        " dateadd(SECOND, CONVERT(bigint, m.end_time / 1000), '1970-01-01') AT TIME ZONE 'UTC' AS endTime, is_final_result " +
+                                        " FROM dh_match m JOIN dh_team t1 ON m.team_host_id = t1.id JOIN dh_team t2 ON m.team_away_id = t2.id" +
+                                        " JOIN dh_league l ON m.league_id = l.id JOIN dh_season s ON m.season_id = s.id" +
+                                        " WHERE m.league_id = @league_id AND m.season_id = @season_id";
                     SqlCommand cmd = new SqlCommand(sqlXepLich, conn);
                     cmd.Parameters.AddWithValue("@league_id", league_id);
                     cmd.Parameters.AddWithValue("@season_id", season_id);

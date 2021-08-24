@@ -16,7 +16,7 @@ namespace LeagueManagement.sonnx
             SqlConnection conn = null;
             try
             {
-                String connString = @"Server=172.30.0.1;Database=QLGD;User=sa;Password=thaind123!@#;MultipleActiveResultSets=true";
+                String connString = @"Data Source=DESKTOP-QC0FLLH\SQLEXPRESS;Initial Catalog=QLGD;Integrated Security=True";
                 conn = new SqlConnection(connString);
             }
             catch (Exception)

@@ -51,7 +51,7 @@ namespace LeagueManagement.sonnx
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
-                    String sqlDoiBong = "SELECT dh_team.id, dh_team.name FROM dh_team WHERE nation_id in (SELECT nation_id FROM dh_league WHERE id=@league_id)";
+                    String sqlDoiBong = "SELECT dh_team.id, dh_team.name FROM dh_team WHERE nation_id IN (SELECT nation_id FROM dh_league WHERE id=@league_id)";
                     SqlCommand cmd = new SqlCommand(sqlDoiBong, conn);
                     cmd.Parameters.AddWithValue("@league_id", id_league);
                     cbbDoiChuNha.DisplayMember = "name";
@@ -62,7 +62,7 @@ namespace LeagueManagement.sonnx
                     table.Load(reader);
                     cbbDoiChuNha.DataSource = table;
                     //================================
-                    String sqlDoiBongK = "SELECT dh_team.id, dh_team.name FROM dh_team WHERE nation_id in (SELECT nation_id FROM dh_league WHERE id=@league_id)";
+                    String sqlDoiBongK = "SELECT dh_team.id, dh_team.name FROM dh_team WHERE nation_id IN (SELECT nation_id FROM dh_league WHERE id=@league_id)";
                     SqlCommand cmdK = new SqlCommand(sqlDoiBongK, conn);
                     cmdK.Parameters.AddWithValue("@league_id", id_league);
                     cbbDoiKhach.DisplayMember = "name";
@@ -89,12 +89,12 @@ namespace LeagueManagement.sonnx
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
-                    String sqlXepLich = " SELECT m.id as STT, l.name as TenGiai, s.name as MuaGiai,  t1.name as host_name, t2.name as away_name,"+
-                                        " dateadd(SECOND, CONVERT(bigint, m.start_time / 1000), '1970-01-01') AT TIME ZONE 'UTC' as startTime," +
-                                        " dateadd(SECOND, CONVERT(bigint, m.end_time / 1000), '1970-01-01') AT TIME ZONE 'UTC' as endTime" +
-                                        " FROM dh_match m JOIN dh_team t1 on m.team_host_id = t1.id JOIN dh_team t2 on m.team_away_id = t2.id"+
-                                        " JOIN dh_league l on m.league_id = l.id join dh_season s on m.season_id = s.id"+
-                                        " WHERE m.league_id = @league_id and m.season_id = @season_id";
+                    String sqlXepLich = " SELECT m.id AS STT, l.name AS TenGiai, s.name AS MuaGiai,  t1.name AS host_name, t2.name AS away_name,"+
+                                        " dateadd(SECOND, CONVERT(bigint, m.start_time / 1000), '1970-01-01') AT TIME ZONE 'UTC' AS startTime," +
+                                        " dateadd(SECOND, CONVERT(bigint, m.end_time / 1000), '1970-01-01') AT TIME ZONE 'UTC' AS endTime" +
+                                        " FROM dh_match m JOIN dh_team t1 ON m.team_host_id = t1.id JOIN dh_team t2 ON m.team_away_id = t2.id"+
+                                        " JOIN dh_league l on m.league_id = l.id JOIN dh_season s ON m.season_id = s.id"+
+                                        " WHERE m.league_id = @league_id AND m.season_id = @season_id";
                     SqlCommand cmd = new SqlCommand(sqlXepLich, conn);
                     cmd.Parameters.AddWithValue("@league_id", league_id);
                     cmd.Parameters.AddWithValue("@season_id", season_id);
@@ -144,12 +144,49 @@ namespace LeagueManagement.sonnx
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
-                    String sql = "SELECT *FROM dh_match WHERE league_id=@league_id and season_id=@season_id and team_host_id=@host_id and team_away_id=@away_id";
+                    String sql = "SELECT *FROM dh_match WHERE league_id=@league_id AND season_id=@season_id AND team_host_id=@host_id AND team_away_id=@away_id";
                     SqlCommand cmd = new SqlCommand(sql, conn);
                     cmd.Parameters.AddWithValue("@league_id", league_id);
                     cmd.Parameters.AddWithValue("@season_id", season_id);
                     cmd.Parameters.AddWithValue("@host_id", host_id);
                     cmd.Parameters.AddWithValue("@away_id", away_id);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    DataTable table = new DataTable();
+                    table.Load(reader);
+                    if (table.Rows != null)
+                    {
+                        if (table.Rows.Count > 0)
+                        {
+                            isOk = true;
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return isOk;
+
+            }
+        }
+        public bool check_match_update(int league_id, int season_id, int host_id, int away_id, int id)
+        {
+            bool isOk = false;
+            using (SqlConnection conn = dataConn.getConnect())
+            {
+                try
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    String sql = "SELECT *FROM dh_match WHERE league_id=@league_id AND season_id=@season_id AND team_host_id=@host_id AND team_away_id=@away_id AND id NOT LIKE @id";
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@league_id", league_id);
+                    cmd.Parameters.AddWithValue("@season_id", season_id);
+                    cmd.Parameters.AddWithValue("@host_id", host_id);
+                    cmd.Parameters.AddWithValue("@away_id", away_id);
+                    cmd.Parameters.AddWithValue("@id", id);
+
                     SqlDataReader reader = cmd.ExecuteReader();
                     DataTable table = new DataTable();
                     table.Load(reader);
@@ -179,12 +216,48 @@ namespace LeagueManagement.sonnx
                 {
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
-                    String sql = "SELECT *FROM dh_match WHERE league_id=@league_id and season_id=@season_id and start_time=@start_time and end_time=@end_time";
+                    String sql = "SELECT *FROM dh_match WHERE league_id=@league_id AND season_id=@season_id AND start_time=@start_time AND end_time=@end_time";
                     SqlCommand cmd = new SqlCommand(sql, conn);
                     cmd.Parameters.AddWithValue("@league_id", league_id);
                     cmd.Parameters.AddWithValue("@season_id", season_id);
                     cmd.Parameters.AddWithValue("@start_time", start_time);
                     cmd.Parameters.AddWithValue("@end_time", end_time);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    DataTable table = new DataTable();
+                    table.Load(reader);
+                    if (table.Rows != null)
+                    {
+                        if (table.Rows.Count > 0)
+                        {
+                            isOk = true;
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return isOk;
+
+            }
+        }
+        public bool check_time_update(int league_id, int season_id, long start_time, long end_time, int id)
+        {
+            bool isOk = false;
+            using (SqlConnection conn = dataConn.getConnect())
+            {
+                try
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    String sql = "SELECT *FROM dh_match WHERE league_id=@league_id AND season_id=@season_id AND start_time=@start_time AND end_time=@end_time AND id NOT LIKE @id";
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@league_id", league_id);
+                    cmd.Parameters.AddWithValue("@season_id", season_id);
+                    cmd.Parameters.AddWithValue("@start_time", start_time);
+                    cmd.Parameters.AddWithValue("@end_time", end_time);
+                    cmd.Parameters.AddWithValue("@id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
                     DataTable table = new DataTable();
                     table.Load(reader);
@@ -276,15 +349,13 @@ namespace LeagueManagement.sonnx
                     kt = ((DateTimeOffset)dtpKT.Value).ToUnixTimeMilliseconds();
                     time_season(season_id, out bd_MuaGiai, out kt_MuaGiai);
                     String sql = "UPDATE dh_match SET  league_id=@gd, season_id=@mg, team_host_id=@hid, team_away_id=@aid,"
-                        + " team_host_goal=@hgoal, team_away_goal=@agoal, start_time=@bd, end_time=@kt, is_final_result=@fn WHERE id=@mt";
+                        + " start_time=@bd, end_time=@kt, is_final_result=@fn WHERE id=@mt";
                     SqlCommand cmd = new SqlCommand(sql, conn);
                     cmd.Parameters.AddWithValue("@mt", int.Parse(dgvXepLich.Rows[index].Cells[0].Value.ToString()));
                     cmd.Parameters.AddWithValue("@gd", cbbTenGiai.SelectedValue.ToString());
                     cmd.Parameters.AddWithValue("@mg", cbbMuaGiai.SelectedValue.ToString());
                     cmd.Parameters.AddWithValue("@hid", cbbDoiChuNha.SelectedValue.ToString());
                     cmd.Parameters.AddWithValue("@aid", cbbDoiKhach.SelectedValue.ToString());
-                    cmd.Parameters.AddWithValue("@hgoal", 0);
-                    cmd.Parameters.AddWithValue("@agoal", 0);
                     cmd.Parameters.AddWithValue("@bd", bd);
                     cmd.Parameters.AddWithValue("@kt", kt);
                     cmd.Parameters.AddWithValue("@fn", 0);
