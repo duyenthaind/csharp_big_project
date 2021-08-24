@@ -48,5 +48,10 @@ namespace LeagueManagement.thaind.common
 
             BaseWorker.PrintAllWorker();
         }
+
+        public static void StopAllWorker()
+        {
+            BaseWorker.StopAllWorker();
+        }
     }
 }

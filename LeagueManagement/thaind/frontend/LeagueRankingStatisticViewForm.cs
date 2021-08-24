@@ -197,8 +197,14 @@ namespace LeagueManagement.thaind.frontend
             }
             catch (FormatException ex)
             {
+                Log.Error("Error", ex);
                 return false;
             }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace LeagueManagement.phuctx
     {
         public SqlConnection getConnect()
         {
-            String connString = @"Data Source=DESKTOP-4H2CDN2\SQLEXPRESS01;Initial Catalog=QLGD;Integrated Security=True";
+            String connString = @"Server=172.30.0.1;Database=QLGD;User=sa;Password=thaind123!@#;MultipleActiveResultSets=true;";
             return new SqlConnection(connString);
         }
 

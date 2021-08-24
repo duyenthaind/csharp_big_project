@@ -52,6 +52,7 @@ namespace LeagueManagement.thaind.frontend
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnClose = new System.Windows.Forms.Button();
             this.btnReCalculate = new System.Windows.Forms.Button();
             this.btnViewTemp = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
@@ -77,9 +78,9 @@ namespace LeagueManagement.thaind.frontend
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(876, 583);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -88,9 +89,9 @@ namespace LeagueManagement.thaind.frontend
             this.dgvRanking.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRanking.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {this.position, this.teamName, this.point, this.numWin, this.numDraw, this.numLost, this.playedMatches, this.numGoalScored, this.numGoalReceived, this.difference});
             this.dgvRanking.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvRanking.Location = new System.Drawing.Point(3, 264);
+            this.dgvRanking.Location = new System.Drawing.Point(3, 293);
             this.dgvRanking.Name = "dgvRanking";
-            this.dgvRanking.Size = new System.Drawing.Size(870, 316);
+            this.dgvRanking.Size = new System.Drawing.Size(870, 287);
             this.dgvRanking.TabIndex = 2;
             // 
             // position
@@ -162,7 +163,7 @@ namespace LeagueManagement.thaind.frontend
             this.panel1.Controls.Add(this.lblLeagueName);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Location = new System.Drawing.Point(3, 119);
+            this.panel1.Location = new System.Drawing.Point(3, 148);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(870, 139);
             this.panel1.TabIndex = 0;
@@ -222,6 +223,7 @@ namespace LeagueManagement.thaind.frontend
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnClose);
             this.panel2.Controls.Add(this.btnReCalculate);
             this.panel2.Controls.Add(this.btnViewTemp);
             this.panel2.Controls.Add(this.btnRefresh);
@@ -233,12 +235,22 @@ namespace LeagueManagement.thaind.frontend
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(870, 110);
+            this.panel2.Size = new System.Drawing.Size(870, 139);
             this.panel2.TabIndex = 1;
+            // 
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(763, 49);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 72);
+            this.btnClose.TabIndex = 3;
+            this.btnClose.Text = "Đóng";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnReCalculate
             // 
-            this.btnReCalculate.Location = new System.Drawing.Point(526, 9);
+            this.btnReCalculate.Location = new System.Drawing.Point(520, 49);
             this.btnReCalculate.Name = "btnReCalculate";
             this.btnReCalculate.Size = new System.Drawing.Size(75, 72);
             this.btnReCalculate.TabIndex = 2;
@@ -248,7 +260,7 @@ namespace LeagueManagement.thaind.frontend
             // 
             // btnViewTemp
             // 
-            this.btnViewTemp.Location = new System.Drawing.Point(607, 8);
+            this.btnViewTemp.Location = new System.Drawing.Point(601, 48);
             this.btnViewTemp.Name = "btnViewTemp";
             this.btnViewTemp.Size = new System.Drawing.Size(75, 72);
             this.btnViewTemp.TabIndex = 2;
@@ -258,7 +270,7 @@ namespace LeagueManagement.thaind.frontend
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(688, 9);
+            this.btnRefresh.Location = new System.Drawing.Point(682, 49);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(75, 72);
             this.btnRefresh.TabIndex = 2;
@@ -268,7 +280,7 @@ namespace LeagueManagement.thaind.frontend
             // 
             // btnView
             // 
-            this.btnView.Location = new System.Drawing.Point(445, 9);
+            this.btnView.Location = new System.Drawing.Point(439, 49);
             this.btnView.Name = "btnView";
             this.btnView.Size = new System.Drawing.Size(75, 72);
             this.btnView.TabIndex = 2;
@@ -278,7 +290,7 @@ namespace LeagueManagement.thaind.frontend
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(58, 60);
+            this.label2.Location = new System.Drawing.Point(52, 100);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 20);
             this.label2.TabIndex = 1;
@@ -286,7 +298,7 @@ namespace LeagueManagement.thaind.frontend
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(58, 9);
+            this.label1.Location = new System.Drawing.Point(52, 49);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 20);
             this.label1.TabIndex = 1;
@@ -295,7 +307,7 @@ namespace LeagueManagement.thaind.frontend
             // cbSeason
             // 
             this.cbSeason.FormattingEnabled = true;
-            this.cbSeason.Location = new System.Drawing.Point(157, 60);
+            this.cbSeason.Location = new System.Drawing.Point(151, 100);
             this.cbSeason.Name = "cbSeason";
             this.cbSeason.Size = new System.Drawing.Size(173, 21);
             this.cbSeason.TabIndex = 0;
@@ -303,7 +315,7 @@ namespace LeagueManagement.thaind.frontend
             // cbLeague
             // 
             this.cbLeague.FormattingEnabled = true;
-            this.cbLeague.Location = new System.Drawing.Point(157, 9);
+            this.cbLeague.Location = new System.Drawing.Point(151, 49);
             this.cbLeague.Name = "cbLeague";
             this.cbLeague.Size = new System.Drawing.Size(173, 21);
             this.cbLeague.TabIndex = 0;
@@ -315,6 +327,7 @@ namespace LeagueManagement.thaind.frontend
             this.ClientSize = new System.Drawing.Size(876, 583);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "LeagueRankingViewForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LeagueRankingViewForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LeagueRankingViewForm_FormClosed);
             this.Load += new System.EventHandler(this.LeagueRankingViewForm_Load);
@@ -324,6 +337,8 @@ namespace LeagueManagement.thaind.frontend
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button btnClose;
 
         private System.Windows.Forms.Button btnViewTemp;
 

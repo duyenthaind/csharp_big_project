@@ -27,9 +27,8 @@ namespace LeagueManagement.sonnx
                     SqlDataReader dt = cmd.ExecuteReader();
                     if (dt.Read() == true)
                     {
-                        DangNhap dn = new DangNhap();
+                        DangNhap.GetMainForm().Hide();
                         MainForm main = new MainForm();
-                        dn.Hide();
                         main.Show();
                     }
                     else

@@ -50,9 +50,7 @@ namespace LeagueManagement.sonnx
             this.btnDong = new System.Windows.Forms.Button();
             this.btnXepBXH = new System.Windows.Forms.Button();
             this.btnCapNhat = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.dgv_TranDau = new System.Windows.Forms.DataGridView();
-            this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.host_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.away_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Host_goal = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,7 +63,7 @@ namespace LeagueManagement.sonnx
             this.grbGiaiDau.SuspendLayout();
             this.grbTiSo.SuspendLayout();
             this.groupThaoTac.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_TranDau)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dgv_TranDau)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -73,7 +71,6 @@ namespace LeagueManagement.sonnx
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.dgv_TranDau, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -290,42 +287,16 @@ namespace LeagueManagement.sonnx
             this.btnCapNhat.UseVisualStyleBackColor = true;
             this.btnCapNhat.Click += new System.EventHandler(this.btnCapNhat_Click);
             // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(258, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(283, 24);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "CẬP NHẬT TỈ SỐ TRẬN ĐẤU";
-            // 
             // dgv_TranDau
             // 
             this.dgv_TranDau.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_TranDau.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.STT,
-            this.host_name,
-            this.away_name,
-            this.Host_goal,
-            this.Away_goal,
-            this.startTime,
-            this.endTime,
-            this.is_final_result});
+            this.dgv_TranDau.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {this.host_name, this.away_name, this.Host_goal, this.Away_goal, this.startTime, this.endTime, this.is_final_result});
             this.dgv_TranDau.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_TranDau.Location = new System.Drawing.Point(3, 295);
             this.dgv_TranDau.Name = "dgv_TranDau";
             this.dgv_TranDau.Size = new System.Drawing.Size(794, 152);
             this.dgv_TranDau.TabIndex = 0;
             this.dgv_TranDau.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_TranDau_CellClick);
-            // 
-            // STT
-            // 
-            this.STT.DataPropertyName = "STT";
-            this.STT.HeaderText = "Mã trận";
-            this.STT.Name = "STT";
-            this.STT.Width = 50;
             // 
             // host_name
             // 
@@ -385,16 +356,14 @@ namespace LeagueManagement.sonnx
             this.Text = "CapNhatTiSo";
             this.Load += new System.EventHandler(this.CapNhatTiSo_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.grbGiaiDau.ResumeLayout(false);
             this.grbGiaiDau.PerformLayout();
             this.grbTiSo.ResumeLayout(false);
             this.grbTiSo.PerformLayout();
             this.groupThaoTac.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_TranDau)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.dgv_TranDau)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         #endregion
@@ -405,7 +374,6 @@ namespace LeagueManagement.sonnx
         private System.Windows.Forms.GroupBox grbGiaiDau;
         private System.Windows.Forms.GroupBox grbTiSo;
         private System.Windows.Forms.GroupBox groupThaoTac;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtAway_goal;
         private System.Windows.Forms.TextBox txtHost_goal;
         private System.Windows.Forms.Button btnLoad;
@@ -422,7 +390,6 @@ namespace LeagueManagement.sonnx
         private System.Windows.Forms.Button btnCapNhat;
         private System.Windows.Forms.Label lblDoiKhach;
         private System.Windows.Forms.Label lblDoiNha;
-        private System.Windows.Forms.DataGridViewTextBoxColumn STT;
         private System.Windows.Forms.DataGridViewTextBoxColumn host_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn away_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Host_goal;
