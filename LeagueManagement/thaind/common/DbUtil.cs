@@ -181,7 +181,8 @@ namespace LeagueManagement.thaind.common
                 {
                     object[] values = new object[result.Columns.Count];
                     var dhTeam = dhTeams.FirstOrDefault(p => p.Id == ranking.TeamId);
-                    values[0] = dhLeagueRankings.IndexOf(ranking);
+                    var index = dhLeagueRankings.IndexOf(ranking);
+                    values[0] = index == -1 ? 0 : index + 1;
                     values[1] = dhTeam != null ? dhTeam.Name : "";
                     values[2] = ranking.Point;
                     values[3] = ranking.NumWin;

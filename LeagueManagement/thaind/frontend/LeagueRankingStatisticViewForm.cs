@@ -59,13 +59,21 @@ namespace LeagueManagement.thaind.frontend
 
         private void DoLoad()
         {
-            var dbContext = DatabaseObject.GetDatabaseContext();
-            cbLeague.DataSource = dbContext.DhLeagues.GetNewBindingList();
-            cbLeague.DisplayMember = "name";
-            cbLeague.ValueMember = "id";
-            cbSeason.DataSource = dbContext.DhSeasons.GetNewBindingList();
-            cbSeason.DisplayMember = "name";
-            cbSeason.ValueMember = "id";
+            try
+            {
+                var dbContext = DatabaseObject.GetDatabaseContext();
+                cbLeague.DataSource = dbContext.DhLeagues.GetNewBindingList();
+                cbLeague.DisplayMember = "name";
+                cbLeague.ValueMember = "id";
+                cbSeason.DataSource = dbContext.DhSeasons.GetNewBindingList();
+                cbSeason.DisplayMember = "name";
+                cbSeason.ValueMember = "id";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
 
             ResetRankingData();
         }
