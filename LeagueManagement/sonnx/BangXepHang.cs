@@ -25,9 +25,16 @@ namespace LeagueManagement.sonnx
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
-            int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-            int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());  
-            dao.ShowData(league_id, season_id, dgvBXH);
+            try
+            {
+                int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+                int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
+                dao.ShowData(league_id, season_id, dgvBXH);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnDong_Click(object sender, EventArgs e)

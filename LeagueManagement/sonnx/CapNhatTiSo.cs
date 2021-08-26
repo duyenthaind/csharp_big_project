@@ -20,9 +20,16 @@ namespace LeagueManagement.sonnx
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
-            int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-            int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
-            dao.ShowData(dgv_TranDau, league_id, season_id);
+            try
+            {
+                int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+                int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
+                dao.ShowData(dgv_TranDau, league_id, season_id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void CapNhatTiSo_Load(object sender, EventArgs e)
@@ -37,32 +44,46 @@ namespace LeagueManagement.sonnx
 
         private void btnCapNhat_Click(object sender, EventArgs e)
         {
-            int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-            int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
-            int index = dgv_TranDau.SelectedCells[0].RowIndex;
-            String check = dgv_TranDau.Rows[index].Cells[7].Value.ToString();
-            
-            if (check.Equals("True"))
+            try
             {
-                MessageBox.Show("Trận đấu đã được cập nhật tỉ số rồi!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } 
-            else
+                int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+                int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
+                int index = dgv_TranDau.SelectedCells[0].RowIndex;
+                String check = dgv_TranDau.Rows[index].Cells[7].Value.ToString();
+
+                if (check.Equals("True"))
+                {
+                    MessageBox.Show("Trận đấu đã được cập nhật tỉ số rồi!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    dao.Update_TiSo(index, dgv_TranDau, txtHost_goal, txtAway_goal, league_id, season_id);
+                    Clear();
+                }
+            }
+            catch (Exception ex)
             {
-                dao.Update_TiSo(index, dgv_TranDau, txtHost_goal, txtAway_goal, league_id, season_id);
-                Clear();
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void dgv_TranDau_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            int index = e.RowIndex;
-            if (index >= 0)
+            try
             {
-                lblDoiNha.Text = dgv_TranDau.Rows[index].Cells[1].Value.ToString();
-                lblDoiKhach.Text = dgv_TranDau.Rows[index].Cells[2].Value.ToString();
-                txtHost_goal.Text = dgv_TranDau.Rows[index].Cells[3].Value.ToString();
-                txtAway_goal.Text = dgv_TranDau.Rows[index].Cells[4].Value.ToString();
-                String check = dgv_TranDau.Rows[index].Cells[7].Value.ToString();
+                int index = e.RowIndex;
+                if (index >= 0)
+                {
+                    lblDoiNha.Text = dgv_TranDau.Rows[index].Cells[1].Value.ToString();
+                    lblDoiKhach.Text = dgv_TranDau.Rows[index].Cells[2].Value.ToString();
+                    txtHost_goal.Text = dgv_TranDau.Rows[index].Cells[3].Value.ToString();
+                    txtAway_goal.Text = dgv_TranDau.Rows[index].Cells[4].Value.ToString();
+                    String check = dgv_TranDau.Rows[index].Cells[7].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
