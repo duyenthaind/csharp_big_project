@@ -138,7 +138,7 @@ namespace LeagueManagement.thaind.frontend
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             ResetRankingData();
