@@ -44,69 +44,90 @@ namespace LeagueManagement.sonnx
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-            int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
-            int.TryParse(cbbDoiChuNha.SelectedValue.ToString(), out var host_id);
-            int.TryParse(cbbDoiKhach.SelectedValue.ToString(), out var away_id);
-            long bd = ((DateTimeOffset)dtpBD.Value).ToUnixTimeMilliseconds();
-            long kt = ((DateTimeOffset)dtpKT.Value).ToUnixTimeMilliseconds();
-            if (cbbDoiChuNha.Text == cbbDoiKhach.Text)
+            try
             {
-                MessageBox.Show("Đội nhà không được chùng đội khách", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+                int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
+                int.TryParse(cbbDoiChuNha.SelectedValue.ToString(), out var host_id);
+                int.TryParse(cbbDoiKhach.SelectedValue.ToString(), out var away_id);
+                long bd = ((DateTimeOffset)dtpBD.Value).ToUnixTimeMilliseconds();
+                long kt = ((DateTimeOffset)dtpKT.Value).ToUnixTimeMilliseconds();
+                if (cbbDoiChuNha.Text == cbbDoiKhach.Text)
+                {
+                    MessageBox.Show("Đội nhà không được chùng đội khách", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            if (dao.check_match(league_id, season_id, host_id, away_id))
-            {
-                MessageBox.Show("Trận đấu đã tồn tại trong mùa giải này rồi", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (dao.check_match(league_id, season_id, host_id, away_id))
+                {
+                    MessageBox.Show("Trận đấu đã tồn tại trong mùa giải này rồi", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (dao.check_time(league_id, season_id, bd, kt))
+                {
+                    MessageBox.Show("Thời gian đã tồn tại trận đấu khác", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    dao.InsertMatch(league_id, season_id, dgvXepLich, cbbTenGiai, cbbMuaGiai, cbbDoiChuNha, cbbDoiKhach, dtpBD, dtpKT);
+                }
             }
-            else if (dao.check_time(league_id, season_id, bd, kt))
+            catch (Exception ex)
             {
-                MessageBox.Show("Thời gian đã tồn tại trận đấu khác", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                dao.InsertMatch(league_id, season_id, dgvXepLich, cbbTenGiai, cbbMuaGiai, cbbDoiChuNha, cbbDoiKhach, dtpBD, dtpKT);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-            int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
-            int index = dgvXepLich.SelectedCells[0].RowIndex;
-            int.TryParse(cbbDoiChuNha.SelectedValue.ToString(), out var host_id);
-            int.TryParse(cbbDoiKhach.SelectedValue.ToString(), out var away_id);
-            long bd = ((DateTimeOffset)dtpBD.Value).ToUnixTimeMilliseconds();
-            long kt = ((DateTimeOffset)dtpKT.Value).ToUnixTimeMilliseconds();
-            int id = int.Parse(dgvXepLich.Rows[index].Cells[0].Value.ToString());
-            if (cbbDoiChuNha.Text == cbbDoiKhach.Text)
+            try
             {
-                MessageBox.Show("Đội nhà không được chùng đội khách", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+                int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
+                int index = dgvXepLich.SelectedCells[0].RowIndex;
+                int.TryParse(cbbDoiChuNha.SelectedValue.ToString(), out var host_id);
+                int.TryParse(cbbDoiKhach.SelectedValue.ToString(), out var away_id);
+                long bd = ((DateTimeOffset)dtpBD.Value).ToUnixTimeMilliseconds();
+                long kt = ((DateTimeOffset)dtpKT.Value).ToUnixTimeMilliseconds();
+                int id = int.Parse(dgvXepLich.Rows[index].Cells[0].Value.ToString());
+                if (cbbDoiChuNha.Text == cbbDoiKhach.Text)
+                {
+                    MessageBox.Show("Đội nhà không được chùng đội khách", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            if (dao.check_match_update(league_id, season_id, host_id, away_id, id))
-            {
-                MessageBox.Show("Trận đấu đã tồn tại trong mùa giải này rồi", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (dao.check_match_update(league_id, season_id, host_id, away_id, id))
+                {
+                    MessageBox.Show("Trận đấu đã tồn tại trong mùa giải này rồi", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (dao.check_time_update(league_id, season_id, bd, kt, id))
+                {
+                    MessageBox.Show("Thời gian đã tồn tại trận đấu khác", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    dao.UpdateMatch(league_id, season_id, index, dgvXepLich, cbbTenGiai, cbbMuaGiai, cbbDoiChuNha, cbbDoiKhach, dtpBD, dtpKT);
+                }
             }
-            else if (dao.check_time_update(league_id, season_id, bd, kt, id))
+            catch (Exception ex)
             {
-                MessageBox.Show("Thời gian đã tồn tại trận đấu khác", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                dao.UpdateMatch(league_id, season_id ,index , dgvXepLich, cbbTenGiai, cbbMuaGiai, cbbDoiChuNha, cbbDoiKhach, dtpBD, dtpKT);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
-            int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
-            int index = dgvXepLich.SelectedCells[0].RowIndex;
-            dao.DeleteMatch(league_id, season_id, index, dgvXepLich);
+            try
+            {
+                int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
+                int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
+                int index = dgvXepLich.SelectedCells[0].RowIndex;
+                dao.DeleteMatch(league_id, season_id, index, dgvXepLich);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnDong_Click(object sender, EventArgs e)
