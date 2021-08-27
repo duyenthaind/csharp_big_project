@@ -122,7 +122,16 @@ namespace LeagueManagement.sonnx
                 int league_id = int.Parse(cbbTenGiai.SelectedValue.ToString());
                 int season_id = int.Parse(cbbMuaGiai.SelectedValue.ToString());
                 int index = dgvXepLich.SelectedCells[0].RowIndex;
-                dao.DeleteMatch(league_id, season_id, index, dgvXepLich);
+                DialogResult dialogResult = MessageBox.Show("Xác nhận xóa", "Xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if(dialogResult == DialogResult.Yes)
+                {
+                    dao.DeleteMatch(league_id, season_id, index, dgvXepLich);
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    return;
+                }
+
             }
             catch (Exception ex)
             {
