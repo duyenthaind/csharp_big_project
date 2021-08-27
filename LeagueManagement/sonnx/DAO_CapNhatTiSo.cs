@@ -87,6 +87,13 @@ namespace LeagueManagement.sonnx
                     SqlCommand cmd = new SqlCommand(sql, conn);
                     cmd.Parameters.AddWithValue("@host_goal", int.Parse(txtHost_goal.Text));
                     cmd.Parameters.AddWithValue("@away_goal", int.Parse(txtAway_goal.Text));
+                    int nha_goal = int.Parse(txtHost_goal.Text);
+                    int khach_goal = int.Parse(txtAway_goal.Text);
+                    if (nha_goal<0 || khach_goal<0)
+                    {
+                        MessageBox.Show("Kết quả trận đấu không được âm", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     cmd.Parameters.AddWithValue("@mt", int.Parse(dgv_TranDau.Rows[index].Cells[0].Value.ToString()));
                     cmd.ExecuteNonQuery();
                     ShowData(dgv_TranDau, league_id, season_id);
