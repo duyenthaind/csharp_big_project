@@ -100,7 +100,8 @@ namespace LeagueManagement.thaind.common
                 var dhLeagueRankings = dhLeagueRankingDao.GetListAllRankingByLeagueSeasonId(leagueId, seasonId);
                 var dhTeams = GetAllTeams();
 
-                var unFinishedMatches = dhMatches.Where(p => p.EndTime > DateTimeOffset.Now.ToUnixTimeMilliseconds())
+                var currentUnixTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                var unFinishedMatches = dhMatches.Where(p => (p.EndTime > currentUnixTimestamp && p.StartTime < currentUnixTimestamp) || (p.EndTime < currentUnixTimestamp && !p.IsFinalResult))
                     .ToList();
                 unFinishedMatches.ForEach((match =>
                 {
